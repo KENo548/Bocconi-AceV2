@@ -1,9 +1,5 @@
-import { GoogleGenAI, Type } from "@google/genai";
+import { Type } from "@google/genai";
 import { generateQuestionFallback } from './groq';
-
-// ── Single billing API key ─────────────────────────────────────────────────────
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY || "YOUR_API_KEY";
-const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 // ── Model routing ─────────────────────────────────────────────────────────────
 // Ingest:              gemini-2.0-flash → gemini-1.5-flash
@@ -29,12 +25,12 @@ const CHAT_GEMINI_FALLBACKS             = ["gemini-2.0-flash", "gemini-2.5-flash
  * (only if a specific model is temporarily overloaded).
  */
 async function callWithRetry(
-  requestFn: (ai: GoogleGenAI, model: string) => Promise<{ text: string | undefined }>,
+  requestFn: (model: string) => Promise<{ text: string | undefined }>,
   modelPriority = GENERATION_MODEL_PRIORITY
 ): Promise<{ text: string | undefined }> {
   for (const model of modelPriority) {
     try {
-      return await requestFn(ai, model);
+      return await requestFn(model);
     } catch (err: unknown) {
       const errStr = String(err);
       const is429 = errStr.includes('429') || errStr.includes('RESOURCE_EXHAUSTED') || errStr.includes('quota');
@@ -287,8 +283,8 @@ Critical reminders:
 
     for (const model of GENERATION_MODEL_PRIORITY) {
       try {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
-        const body = {
+        const url = `/api/gemini`;
+        const bodyPayload = {
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
             responseMimeType: "application/json",
@@ -348,7 +344,7 @@ Critical reminders:
         const res = await fetch(url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
+          body: JSON.stringify({ action: 'rawFetch', model, payload: bodyPayload }),
         });
         const data = await res.json();
 
@@ -452,22 +448,31 @@ Rules:
 `;
 
   const response = await callWithRetry(
-    (ai, model) => ai.models.generateContent({
-      model,
-      contents: prompt,
-      config: {
-        responseMimeType: 'application/json',
-        responseSchema: {
-          type: Type.OBJECT,
-          properties: {
-            analysis: { type: Type.STRING },
-            advice: { type: Type.STRING },
-            recommendations: { type: Type.ARRAY, items: { type: Type.STRING } },
-          },
-          required: ['analysis', 'advice', 'recommendations'],
-        },
-      },
-    }),
+    async (model) => {
+      const res = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'generateContent',
+          model,
+          contents: prompt,
+          config: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+              type: Type.OBJECT,
+              properties: {
+                analysis: { type: Type.STRING },
+                advice: { type: Type.STRING },
+                recommendations: { type: Type.ARRAY, items: { type: Type.STRING } },
+              },
+              required: ['analysis', 'advice', 'recommendations'],
+            },
+          }
+        })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
     MISTAKE_ANALYSIS_GEMINI_FALLBACKS
   );
 
@@ -489,11 +494,16 @@ export async function sendChatMessageGemini(
   ];
 
   const response = await callWithRetry(
-    (ai, model) => ai.models.generateContent({
-      model,
-      contents,
-      config: {
-        systemInstruction: `You are an elite tutor for the Bocconi Undergraduate Entrance Test (UB test).
+    async (model) => {
+      const res = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'generateContent',
+          model,
+          contents,
+          config: {
+            systemInstruction: `You are an elite tutor for the Bocconi Undergraduate Entrance Test (UB test).
 You have deep knowledge of the test style, syllabus, scoring (−0.2 / −0.33 penalty system),
 and the 4 official mock tests provided by Bocconi/GiuntiPsy.
 
@@ -505,8 +515,12 @@ Your role:
 - Use markdown. Always use LaTeX for math: $...$ inline, $$...$$ for display blocks.
 - Be direct, concise, and academic. Do not over-praise.
 - ALWAYS provide a complete answer. You MUST never say you cannot answer — if a topic is unclear, provide your best explanation and flag any uncertainty inline.`,
-      },
-    }),
+          }
+        })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      return res.json();
+    },
     CHAT_GEMINI_FALLBACKS
   );
 
@@ -542,89 +556,95 @@ IMPORTANT: Output ONLY a JSON array of objects that matches the requested schema
   let lastIngestError = '';
   for (const model of INGEST_MODELS) {
     try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: [
-          {
-            role: 'user',
-            parts: [
-              { text: prompt },
-              {
-                inlineData: {
-                  data: fileBase64,
-                  mimeType: mimeType,
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'generateContent',
+          model,
+          contents: [
+            {
+              role: 'user',
+              parts: [
+                { text: prompt },
+                {
+                  inlineData: {
+                    data: fileBase64,
+                    mimeType: mimeType,
+                  },
                 },
-              },
-            ],
-          },
-        ],
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: Type.ARRAY,
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                topic: { type: Type.STRING },
-                subtopic: { type: Type.STRING },
-                question: { type: Type.STRING },
-                options: { type: Type.ARRAY, items: { type: Type.STRING } },
-                correctAnswer: { type: Type.STRING },
-                explanation: { type: Type.STRING },
-                difficulty: { type: Type.STRING },
-                styleAnalysis: { type: Type.STRING },
-                syllabusAlignment: { type: Type.STRING },
-                chartData: {
-                  type: Type.OBJECT,
-                  nullable: true,
-                  properties: {
-                    type: { type: Type.STRING },
-                    title: { type: Type.STRING },
-                    xAxisLabel: { type: Type.STRING },
-                    yAxisLabel: { type: Type.STRING },
-                    series: {
-                      type: Type.ARRAY,
-                      items: {
-                        type: Type.OBJECT,
-                        properties: {
-                          name: { type: Type.STRING },
-                          data: {
-                            type: Type.ARRAY,
-                            items: {
-                              type: Type.OBJECT,
-                              properties: {
-                                label: { type: Type.STRING },
-                                value: { type: Type.NUMBER },
-                                x: { type: Type.NUMBER },
-                                y: { type: Type.NUMBER },
+              ],
+            },
+          ],
+          config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: Type.ARRAY,
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  topic: { type: Type.STRING },
+                  subtopic: { type: Type.STRING },
+                  question: { type: Type.STRING },
+                  options: { type: Type.ARRAY, items: { type: Type.STRING } },
+                  correctAnswer: { type: Type.STRING },
+                  explanation: { type: Type.STRING },
+                  difficulty: { type: Type.STRING },
+                  styleAnalysis: { type: Type.STRING },
+                  syllabusAlignment: { type: Type.STRING },
+                  chartData: {
+                    type: Type.OBJECT,
+                    nullable: true,
+                    properties: {
+                      type: { type: Type.STRING },
+                      title: { type: Type.STRING },
+                      xAxisLabel: { type: Type.STRING },
+                      yAxisLabel: { type: Type.STRING },
+                      series: {
+                        type: Type.ARRAY,
+                        items: {
+                          type: Type.OBJECT,
+                          properties: {
+                            name: { type: Type.STRING },
+                            data: {
+                              type: Type.ARRAY,
+                              items: {
+                                type: Type.OBJECT,
+                                properties: {
+                                  label: { type: Type.STRING },
+                                  value: { type: Type.NUMBER },
+                                  x: { type: Type.NUMBER },
+                                  y: { type: Type.NUMBER },
+                                }
                               }
                             }
                           }
                         }
-                      }
-                    },
-                    tableData: {
-                      type: Type.OBJECT,
-                      properties: {
-                        headers: { type: Type.ARRAY, items: { type: Type.STRING } },
-                        rows: { type: Type.ARRAY, items: { type: Type.ARRAY, items: { type: Type.STRING } } }
+                      },
+                      tableData: {
+                        type: Type.OBJECT,
+                        properties: {
+                          headers: { type: Type.ARRAY, items: { type: Type.STRING } },
+                          rows: { type: Type.ARRAY, items: { type: Type.ARRAY, items: { type: Type.STRING } } }
+                        }
                       }
                     }
                   }
-                }
-              },
-              required: [
-                "topic", "subtopic", "question", "options",
-                "correctAnswer", "explanation",
-                "difficulty", "styleAnalysis", "syllabusAlignment"
-              ]
-            }
-          },
-          temperature: 0.1,
-        },
+                },
+                required: [
+                  "topic", "subtopic", "question", "options",
+                  "correctAnswer", "explanation",
+                  "difficulty", "styleAnalysis", "syllabusAlignment"
+                ]
+              }
+            },
+            temperature: 0.1,
+          }
+        })
       });
-
-      const responseText = response.text;
+      if (!response.ok) throw new Error(await response.text());
+      const data = await response.json();
+      const responseText = data.text;
       if (!responseText) throw new Error("Empty response from Gemini");
 
       const parsed = JSON.parse(responseText) as GeneratedQuestion[];
@@ -660,14 +680,21 @@ Output a highly dense, instructional markdown string that will be injected into 
 
   for (const model of SYNTHESIS_MODELS) {
     try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: [
-          { role: 'user', parts: [{ text: prompt }, { text: questionContext }] }
-        ],
-        config: { temperature: 0.2 }
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'generateContent',
+          model,
+          contents: [
+            { role: 'user', parts: [{ text: prompt }, { text: questionContext }] }
+          ],
+          config: { temperature: 0.2 }
+        })
       });
-      if (response.text) return response.text;
+      if (!response.ok) throw new Error(await response.text());
+      const data = await response.json();
+      if (data.text) return data.text;
     } catch (error) {
       console.warn(`[Synthesis] Error on model=${model}:`, String(error).slice(0, 100));
     }

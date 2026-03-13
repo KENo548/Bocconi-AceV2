@@ -13,8 +13,7 @@ import { sendChatMessageGemini, analyzeMistakeGemini, MistakeAnalysis } from './
 
 export type { MistakeAnalysis };
 
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY || '';
-const GROQ_BASE = 'https://api.groq.com/openai/v1';
+const GROQ_BASE = '/api/groq';
 
 const GROQ_CHAT_MODEL = 'llama-3.3-70b-versatile';          // Chatbot
 const GROQ_REASON_MODEL = 'qwen-qwq-32b';   // Mistake Analysis
@@ -26,13 +25,10 @@ async function groqChat(
     messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
     opts: { temperature?: number; max_tokens?: number; response_format?: { type: string } } = {}
 ): Promise<string> {
-    if (!GROQ_API_KEY) throw new Error('No Groq API key configured.');
-
-    const res = await fetch(`${GROQ_BASE}/chat/completions`, {
+    const res = await fetch(GROQ_BASE, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${GROQ_API_KEY}`,
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             model,
