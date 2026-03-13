@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  
+  --color-cream-bg: #F4F1EA;
+  --color-cream-card: #FAF9F6;
+  --color-hunter-green: #233A2E;
+  --color-hunter-green-hover: #1A2B22;
+  --color-muted-gold: #B89E58;
+  --color-old-ink: #2A2C2B;
+  --color-old-border: #E3DED1;
+  --color-burgundy: #7A3E3E;
+  --color-olive: #4A5D23;
+}
+
+body {
+  background-color: var(--color-cream-bg);
+  color: var(--color-old-ink);
+}
+
+/* Override KaTeX error styling — render errors as normal text, not bright red */
+.katex .katex-error {
+  color: inherit !important;
+}
+.katex .mord.text {
+  color: inherit;
+}
+/* Hide the red KaTeX error color on broken expressions */
+.katex-error {
+  color: inherit !important;
+  font-style: normal !important;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    background-color: white;
+  }
+  header {
+    display: none !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+  .print-container {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
