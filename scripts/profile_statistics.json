@@ -1,0 +1,168 @@
+{
+  "topic": "Statistics",
+  "approved": false,
+  "question_count": 5,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Averages / Weighted Means",
+        "count": 4,
+        "confidence": "HIGH",
+        "refs": [
+          "M1Q31",
+          "M2Q45",
+          "M3Q34",
+          "M4Q16"
+        ]
+      },
+      {
+        "name": "Data Representation / Histograms",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M4Q30"
+        ]
+      }
+    ],
+    "coverage_assessment": "The statistical coverage is incredibly narrow, completely ignoring median, mode, standard deviation, variance, and probability distributions. The dominant focus is strictly on weighted averages, either explicitly stated in text or requiring data extraction from a histogram."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [
+        "M1Q31",
+        "M2Q45",
+        "M3Q34",
+        "M4Q16"
+      ],
+      "steps_required": "2 to 3 steps (multiply weight by value, sum, divide by total)",
+      "concept_mixing": "None. Pure arithmetic.",
+      "qualifier_sensitivity": "Low.",
+      "answer_similarity": "Moderate."
+    },
+    "medium": {
+      "refs": [
+        "M4Q30"
+      ],
+      "steps_required": "3 to 4 steps (read multiple histogram bars, sum, compare to total)",
+      "concept_mixing": "Visual data interpretation combined with interval logic",
+      "qualifier_sensitivity": "High ('most', 'about')",
+      "answer_similarity": "High; options mix up raw counts with percentages"
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "5+ steps",
+      "concept_mixing": "Combining weighted averages with algebraic unknowns",
+      "qualifier_sensitivity": "High ('median of the weighted distribution')",
+      "answer_similarity": "Extremely high; fractional differences"
+    }
+  },
+  "trap_and_error_architecture": {
+    "distractor_engine": {
+      "input_structure": "Group 1 (w1, v1), Group 2 (w2, v2)",
+      "correct_transformation": "(w1*v1 + w2*v2) / (w1+w2)",
+      "finite_distractor_set": [
+        "(v1+v2)/2 — Unweighted mean anchor, MUST be present in all average questions. Maps to 50 in M1Q31/M2Q45",
+        "(w2*v1 + w1*v2)/(w1+w2) — Swapped weights / False Familiarity trap",
+        "(v_old - v_new) / arbitrary_n — Naive difference division for moving averages, maps to M3Q34: 6 or 3",
+        "Partial visual sum omission — Visual interval mis-aggregation from histograms, maps to M4Q30: 70"
+      ]
+    },
+    "traps": [
+      {
+        "name": "Unweighted Mean Anchor",
+        "mechanism": "Student computes simple average (v1+v2)/2 = 50, ignoring population weights entirely. Must appear as a distractor in every weighted average question.",
+        "refs": [
+          "M1Q31",
+          "M2Q45"
+        ],
+        "name_normalized": "UNWEIGHTED_MEAN_ANCHOR"
+      },
+      {
+        "name": "False Familiarity / Swapped Weights",
+        "mechanism": "M1Q31 (70 people aged 30, 30 people aged 70) and M2Q45 (30 people aged 30, 70 people aged 70) are structurally identical with swapped weights. Students who recognise the familiar structure apply M1Q31 mechanics to M2Q45, getting 42 instead of 58.",
+        "refs": [
+          "M1Q31",
+          "M2Q45"
+        ],
+        "name_normalized": "FALSE_FAMILIARITY___SWAPPED_WEIGHTS"
+      },
+      {
+        "name": "Naive Difference Division",
+        "mechanism": "For moving average questions, student computes the raw score drop (30-18=12) and divides by n without recalculating the full weighted average.",
+        "refs": [
+          "M3Q34"
+        ],
+        "name_normalized": "NAIVE_DIFFERENCE_DIVISION"
+      },
+      {
+        "name": "Compound Interval Mis-aggregation",
+        "mechanism": "Student reads a single histogram bar value instead of summing adjacent bars to cover a compound interval.",
+        "refs": [
+          "M4Q30"
+        ],
+        "name_normalized": "COMPOUND_INTERVAL_MIS_AGGREGATION"
+      }
+    ],
+    "elimination_mapping": {
+      "M1Q31": {
+        "A": "Meta-trap — falsely believes weights make calculation impossible",
+        "B": "Unweighted mean anchor: (30+70)/2 = 50",
+        "C": "Partial weight error: (70+30)/2 = 50 or intermediate arithmetic error",
+        "E": "Arithmetic error in weighted sum"
+      },
+      "M2Q45": {
+        "A": "Meta-trap — falsely believes weights make calculation impossible",
+        "B": "Arithmetic error in weighted sum",
+        "C": "Unweighted mean anchor: (30+70)/2 = 50",
+        "E": "Swapped weights trap: applied M1Q31 mechanics → (70×30+30×70)/100 = 42... or intermediate error"
+      },
+      "M3Q34": {
+        "B": "Naive difference divided by wrong n: 12/something = 3.6",
+        "C": "Naive difference divided by n=5 then rounded: 12/5 ≈ 2",
+        "D": "Naive difference divided by n=4: 12/4 = 3",
+        "E": "Raw score drop without any division: 30-18 = 12... or drop of one exam"
+      },
+      "M4Q16": {
+        "A": "Arithmetic error in weighted sum: slightly overcounted",
+        "C": "Simple average of family sizes 1,2,3 ignoring frequencies: (1+2+3)/3 = 2",
+        "D": "Overcounted high-frequency families",
+        "E": "Partial weight application"
+      },
+      "M4Q30": {
+        "B": "Read only the [0,0.5] and [0.5,1.0] bars: ~30+60=90... wait, misassigned to wrong interval → 70",
+        "C": "Correct aggregation but rejected — student miscalculated",
+        "D": "Took [0.5,1.0] bar alone (60) and divided by 200: 30%, not 60%",
+        "E": "Visually identified [1.5,2.0] as tallest bar and selected 'most'"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "description": "Time pressure stems from manual arithmetic fatigue. Calculating large weighted sums like (70×30)+(30×70) without a calculator forces students to manage zeros and long division. Cognitive load spikes when visual extraction precedes the arithmetic. The False Familiarity trap compounds this — students who recognise the M1Q31 structure in M2Q45 skip re-reading and apply stored mechanics directly."
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure.",
+    "layer_1_problem_structure_mutation": "Presenting data visually (histogram) instead of textually to force extraction steps.",
+    "layer_2_cognitive_load_injection": "Swapping weights in highly similar contexts (M1Q31 vs M2Q45) to catch students operating on autopilot.",
+    "layer_3_answer_engineering": "MOST WEIGHT. Systematically insert the unweighted average as a distractor in every weighted mean question. Include the swapped-weight result for near-duplicate problems."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 2,
+    "figure_refs": [
+      "M4Q16",
+      "M4Q30"
+    ],
+    "description": "Figures are histograms. Traps cluster around misinterpreting interval bounds (e.g., misreading the width of [0.5,1.5] as a single bar rather than the sum of two bars). The 'about' qualifier forgives minor visual misreadings but creates ambiguity, making students second-guess exact mathematical results."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "about",
+      "average",
+      "decreased by"
+    ],
+    "primary_ambiguity_mechanism": "The word 'about' in histogram questions acts as a qualifier to forgive minor visual misreadings, but it creates ambiguity making students second-guess exact mathematical results. Interval bounds ([0,0.5] vs [0.5,1.0]) strictly test boundary inclusion logic.",
+    "near_correct_construction": "Second-closest options represent the unweighted mean or the result of swapped weights — both numerically close to the correct answer and seemingly reasonable."
+  },
+  "generation_fingerprint": "## STATISTICS GENERATION FINGERPRINT\n\nBocconi Statistics focuses almost exclusively on weighted averages and visual data extraction. The test generates difficulty through manual arithmetic fatigue and visual misalignments — not statistical theory. Zero advanced concepts appear in the dataset (no median, mode, standard deviation, variance, distributions).\n\nDominant question types: textual weighted means (two or three groups with different sizes and values) and histogram aggregations requiring visual data extraction before calculation.\n\nDISTRACTOR ENGINE: Three mandatory distractors exist for every weighted average question.\n- Unweighted Mean Anchor (MUST APPEAR): student computes simple average (v1+v2)/2, ignoring population weights entirely. In symmetric cases this equals exactly 50. This distractor must always be present.\n- Swapped Weights Trap (False Familiarity): student applies the correct formula but assigns weight1 to value2 and weight2 to value1. In M1Q31 (70 people aged 30, 30 people aged 70) this produces a plausible-looking wrong answer.\n- Arbitrary Denominator Trap: student divides by a number other than the total population — e.g., dividing by the number of groups instead of the total count.\n- For histograms: Visual Interval Mis-aggregation — student sums bars for adjacent intervals instead of the correct specified range.\n\nANSWER ENGINEERING MODEL: 1 correct weighted mean + 1 unweighted anchor + 1 swapped weights + 1 arbitrary denominator + 1 partial sum (histogram only).\n\nQUALIFIER INVENTORY: weighted average, overall average, combined mean, approximately, about. The word 'overall' is the primary signal that weights are required.\n\nCALIBRATED UPLIFT: Easy = two groups, explicit weights stated numerically. Medium = three groups or weights given as fractions requiring conversion. Hard = algebraic unknown in one group requiring solving for the unknown weight/value.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

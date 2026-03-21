@@ -1,0 +1,144 @@
+{
+  "topic": "Trigonometry",
+  "approved": false,
+  "question_count": 2,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Right triangle trigonometry",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M2Q7"
+        ]
+      },
+      {
+        "name": "Trigonometric Graphs",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M3Q44"
+        ]
+      }
+    ],
+    "coverage_assessment": "With only 2 questions, the dataset is severely constrained. We observe basic SOH CAH TOA application and period-to-argument translation from a graph. There is absolutely no evidence of trigonometric identities, equations, double-angle formulas, or unit circle evaluations. Every claim in this profile is LOW CONFIDENCE unless supported by both questions."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [
+        "M2Q7"
+      ],
+      "note": "[LOW CONFIDENCE — 1 example only]",
+      "steps_required": "1 to 2 steps (identify angle, choose correct trig ratio)",
+      "concept_mixing": "None.",
+      "qualifier_sensitivity": "Low.",
+      "answer_similarity": "High; options mix the same variables with different trig functions"
+    },
+    "medium": {
+      "refs": [
+        "M3Q44"
+      ],
+      "note": "[LOW CONFIDENCE — 1 example only]",
+      "steps_required": "2 to 3 steps (read period from graph, equate to 2π/b, solve for b)",
+      "concept_mixing": "Graphical interpretation combined with algebraic manipulation",
+      "qualifier_sensitivity": "Low.",
+      "answer_similarity": "High; options contain the raw period number instead of the derived argument"
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 Hard examples]",
+      "steps_required": "4+ steps",
+      "concept_mixing": "Combining phase shifts with period adjustments",
+      "qualifier_sensitivity": "High.",
+      "answer_similarity": "Options differ only by a negative sign or pi factor"
+    }
+  },
+  "trap_and_error_architecture": {
+    "distractor_engine": [
+      {
+        "input_structure": "Right triangle with labelled sides (a, b, c) and angles (α, β)",
+        "correct_transformation": "Identify reference angle → Apply SOH CAH TOA → Express target side in terms of given side and trig function",
+        "finite_distractor_set": [
+          "sin instead of tan — e.g., b = c·sin(β) uses hypotenuse instead of adjacent",
+          "cos instead of tan — e.g., b = c·cos(β)",
+          "inverted ratio — e.g., a = c·sin(β) instead of b = a·tan(β)",
+          "wrong reference angle — using α instead of β or vice versa"
+        ]
+      },
+      {
+        "input_structure": "Periodic graph with readable period P",
+        "correct_transformation": "Read period P from graph → Apply period formula: b = 2π / P → Write function as cos(bx)",
+        "finite_distractor_set": [
+          "b = P directly — Period-Frequency conflation, e.g., b=4 instead of b=π/2",
+          "b = π / P — Partial formula application, e.g., b=π/4",
+          "b = 2 / P — Dropped π entirely",
+          "b = P / 2 — Inverted formula direction",
+          "raw visual number inserted directly into argument — e.g., cos(4x) from reading peak at x=4"
+        ]
+      }
+    ],
+    "traps": [
+      {
+        "name": "Ratio Inversion / Wrong Function",
+        "mechanism": "Student identifies the correct sides but applies sin or cos instead of tan, or inverts the ratio (adjacent/opposite instead of opposite/adjacent).",
+        "refs": [
+          "M2Q7"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "RATIO_INVERSION___WRONG_FUNCTION"
+      },
+      {
+        "name": "Period-Frequency Conflation",
+        "mechanism": "Student reads the period directly from the graph and inserts it into the function argument without applying the conversion formula b = 2π/P.",
+        "refs": [
+          "M3Q44"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "PERIOD_FREQUENCY_CONFLATION"
+      }
+    ],
+    "elimination_mapping": {
+      "M2Q7": {
+        "A": "Applied cos instead of tan with hypotenuse: b = c·cos(β)",
+        "C": "Inverted the reference angle: a = c·sin(β) — used β for side a",
+        "D": "Inverted the reference angle with cos: a = c·cos(α) — correct form but for wrong side",
+        "E": "Used α instead of β as reference: b = c·sin(α)"
+      },
+      "M3Q44": {
+        "A": "Period-Frequency conflation with 2π factor: b = 2π → cos(2πx), period = 1 not 4",
+        "B": "Dropped π, used b=2: cos(2x), period = π not 4",
+        "C": "Used b=3: cos(3x), period = 2π/3 not 4",
+        "D": "Partial formula: b = π/P applied incorrectly → b=π → cos(πx), period=2 not 4"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "description": "Visual translation under time limits causes students to bypass intermediate derivations. Seeing a wave peak at x=4 triggers a reflex to select an answer containing '4' or 'π', rather than deliberately calculating Period=2π/b → 4=2π/b → b=π/2. Time pressure eliminates the verification step. For right triangle questions, rushing causes students to grab the first ratio that looks right without checking which angle is the reference."
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure.",
+    "layer_1_problem_structure_mutation": "Testing standard right-triangle definitions using purely abstract variables (a, b, c, α, β) rather than discrete numbers.",
+    "layer_2_cognitive_load_injection": "Presenting graphical data where axis numbers do not directly match the function argument.",
+    "layer_3_answer_engineering": "MOST WEIGHT. Distractors explicitly use the visible, unadjusted numbers from the prompt. For period questions: raw period value as b, π/P, P/2, and 2/P must all appear. For ratio questions: sin, cos, and tan with both correct and wrong reference angles must all appear."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 2,
+    "figure_refs": [
+      "M2Q7",
+      "M3Q44"
+    ],
+    "description": "Highly figure-dependent. The right triangle in M2Q7 requires correctly orienting 'opposite' and 'adjacent' based on which non-right angle is referenced in each option. The graph in M3Q44 requires identifying the exact x-axis value of one full cycle. Misreading the visual anchor guarantees a trap selection.",
+    "primary_risk": "Students rely on the visual scale rather than deriving the mathematical property from first principles. The x=4 peak in M3Q44 is the highest-risk visual anchor — it appears directly in wrong options A, B, C, D as a raw number."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "select the correct relation",
+      "which of the following functions admits"
+    ],
+    "primary_ambiguity_mechanism": "'Select the correct relation' forces sequential verification of all options rather than direct construction, consuming more time and opening the door to verifying a trap choice incorrectly.",
+    "near_correct_construction": "Second-closest wrong options differ by exactly one element: same sides with different trig function (sin vs tan), or same function structure with adjacent period value (cos(πx) vs cos(πx/2))."
+  },
+  "generation_fingerprint": "## TRIGONOMETRY GENERATION FINGERPRINT\n\n(Note: Based on severely limited data of 2 questions. All claims are LOW CONFIDENCE unless independently verified.)\n\nThe Trigonometry domain focuses on foundational geometric and graphical definitions rather than complex identity proofs. Dominant question types require translating visual models (triangles or periodic waves) into algebraic formulas. The distractor engine operates by taking the direct visual anchors (an angle symbol or an x-intercept) and inserting them directly into incorrect but familiar-looking algebraic ratios without the required transformation.\n\nThe generatable distractor system operates on two independent engines:\n\nRight Triangle Engine: INPUT = triangle with sides (a, b, c) and angles (α, β). CORRECT TRANSFORMATION = identify reference angle → apply SOH CAH TOA → express target side. FINITE DISTRACTOR SET = sin instead of tan; cos instead of tan; inverted ratio (adjacent over opposite); wrong reference angle (α instead of β).\n\nPeriodic Graph Engine: INPUT = graph with readable period P. CORRECT TRANSFORMATION = b = 2π / P → write cos(bx). FINITE DISTRACTOR SET = b = P (raw period as argument); b = π/P (partial formula); b = 2/P (dropped π); b = P/2 (inverted direction); raw visual number inserted as argument.\n\nPrimary trap mechanics involve Ratio Inversion and Period-Frequency Conflation, punishing students who plug visible numbers directly into formulas without applying the transformation rule.\n\nThe primary difficulty driver is not Trigonometry complexity but the precision required to distinguish answer choices engineered from specific reasoning errors.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

@@ -1,0 +1,364 @@
+{
+  "topic": "Numerical reasoning",
+  "approved": false,
+  "question_count": 26,
+  "coverage_map": {
+    "figure_types": {
+      "Table": {
+        "count": 11,
+        "confidence": "HIGH",
+        "examples": [
+          "M1Q23",
+          "M1Q24",
+          "M1Q38",
+          "M2Q19",
+          "M2Q24",
+          "M3Q19",
+          "M3Q22",
+          "M3Q27",
+          "M4Q9",
+          "M4Q24",
+          "M4Q47"
+        ]
+      },
+      "Bar Chart (Grouped/Stacked)": {
+        "count": 6,
+        "confidence": "HIGH",
+        "examples": [
+          "M1Q15",
+          "M1Q29",
+          "M1Q45",
+          "M2Q38",
+          "M3Q46",
+          "M4Q12"
+        ]
+      },
+      "Pie Chart": {
+        "count": 4,
+        "confidence": "HIGH",
+        "examples": [
+          "M3Q4",
+          "M3Q9",
+          "M4Q14",
+          "M4Q42"
+        ]
+      },
+      "Line Graph": {
+        "count": 2,
+        "confidence": "HIGH",
+        "examples": [
+          "M2Q1",
+          "M2Q37"
+        ]
+      },
+      "No Figure (Pure Arithmetic)": {
+        "count": 2,
+        "confidence": "HIGH",
+        "examples": [
+          "M2Q31",
+          "M3Q1"
+        ]
+      }
+    },
+    "question_operation_types": {
+      "Percentage Calculations/Change": {
+        "examples": [
+          "M3Q9",
+          "M4Q47",
+          "M2Q31",
+          "M4Q24",
+          "M3Q1"
+        ]
+      },
+      "Ratios and Proportions": {
+        "examples": [
+          "M1Q29",
+          "M2Q14",
+          "M4Q9"
+        ]
+      },
+      "Filtering by Condition/Algebraic Matching": {
+        "examples": [
+          "M3Q19",
+          "M4Q42"
+        ]
+      },
+      "Multi-step Derivation": {
+        "examples": [
+          "M3Q4",
+          "M3Q9",
+          "M4Q14"
+        ]
+      },
+      "Statement Evaluation (T/F/C NR hybrid)": {
+        "examples": [
+          "M1Q23",
+          "M1Q38",
+          "M3Q22",
+          "M4Q24"
+        ]
+      }
+    }
+  },
+  "difficulty_ladder": {
+    "distribution_note": "8 Hard, 14 Medium, 4 Easy. Heavy skew reflects Bocconi's mechanism: NR does not test basic chart reading, it tests structural precision, logical validity under time pressure, and cognitive load management.",
+    "EASY": {
+      "description": "Single calculation step, direct read from figure or pure arithmetic. Minimal structural traps. Options mathematically distinct and spread out.",
+      "examples": [
+        "M3Q1 (pure arithmetic)",
+        "M1Q23 (direct Total row read)"
+      ],
+      "signals": {
+        "steps": 1,
+        "data_density": "low",
+        "trap_presence": "minimal",
+        "answer_similarity": "low"
+      }
+    },
+    "MEDIUM": {
+      "description": "2-3 calculation steps. Comparative reads across years or categories. Reference year and absolute/percentage traps appear. Unit scale traps introduced.",
+      "examples": [
+        "M1Q29 (ratio comparison across years)",
+        "M3Q4 (thousands unit trap)"
+      ],
+      "signals": {
+        "steps": "2-3",
+        "data_density": "medium",
+        "trap_presence": "medium",
+        "answer_similarity": "medium - options differ by one omitted step"
+      }
+    },
+    "HARD": {
+      "description": "Dense conditional rules mixing text-based figure modification and algebraic derivation. Forces projection of data not in figure. Statement evaluation across all data partitions. Options map directly to dropping exactly one condition.",
+      "examples": [
+        "M3Q19 (May 2020 rules on June 2020 table)",
+        "M3Q9 (multi-step pie with reference year)",
+        "M4Q42 (filtered subset denominator)"
+      ],
+      "signals": {
+        "steps": "4+",
+        "data_density": "high",
+        "trap_presence": "heavy",
+        "answer_similarity": "high - calibrated to exact dropped conditions"
+      },
+      "medium_vs_hard_distinction": "Conditional Bridging and Model Verification. Medium questions ask you to process data in the figure. Hard questions provide text rules that modify figure data, or force exhaustive evaluation of 5 logical claims across multiple variables."
+    },
+    "HARD_blueprint": {
+      "description": "Hard NR questions provide bulleted text rules that algebraically modify figure data before calculations begin. Sequential condition stacking: 3-4 conditions that must be applied in strict order. Each condition narrows the data domain. Dropping any one condition produces a numerically plausible wrong answer.",
+      "key_rule": "Hard = figure as starting matrix + text conditions that transform it + answer options calibrated to dropped conditions.",
+      "examples": [
+        "M3Q19 (May 2020 rules on June 2020 table)",
+        "M4Q42 (filtered subset + percentage)"
+      ],
+      "signals": {
+        "steps": "4+",
+        "data_density": "high",
+        "trap_presence": "heavy — each option = one dropped condition",
+        "answer_similarity": "high"
+      }
+    }
+  },
+  "trap_and_error_architecture": {
+    "structural_and_calculation_traps": {
+      "ROW_COLUMN_CONFUSION": {
+        "mechanism": "Student reads from wrong axis or confuses row with column header.",
+        "examples": [
+          "M3Q19 (Mario Rossi row vs Carlo Paoli row logic)",
+          "M1Q24 (column headers 240/250 vs row values 320/420)"
+        ]
+      },
+      "REFERENCE_YEAR_PERIOD": {
+        "mechanism": "Student calculates using wrong baseline period.",
+        "examples": [
+          "M4Q47 (increase vs 2018 but student uses 2025)",
+          "M3Q9 (pie is 2019, prompt asks 2020)"
+        ]
+      },
+      "DENOMINATOR_SHIFT": {
+        "mechanism": "Student applies correct calculation to wrong base population — divides by grand total instead of filtered subset, or fails to update denominator when subset is isolated.",
+        "examples": [
+          "M4Q42 (60% of whole pie vs 60% of >15 beds slice)",
+          "M1Q23 (male with disabilities out of all employees vs total male employees)"
+        ]
+      },
+      "ABSOLUTE_VS_PERCENTAGE": {
+        "mechanism": "Confusing raw numerical growth with proportional growth.",
+        "examples": [
+          "M4Q47 (Asia largest absolute, Africa largest %)",
+          "M1Q29 (absolute moped count vs produced-to-sold ratio)"
+        ]
+      },
+      "WRONG_CATEGORY": {
+        "mechanism": "Selecting data for similarly named category — pure label misreading, distinct from denominator shift.",
+        "examples": [
+          "M3Q9 (chart: Luxury goods rentals, prompt asks: luxury car rentals)"
+        ]
+      },
+      "MULTI_STEP_STOP": {
+        "mechanism": "Stopping after first calculation step when question requires two or more.",
+        "examples": [
+          "M3Q9 (10% of 144k = 14,400 is a trap option; correct requires multiplying by 1/4 to get 3,600)"
+        ]
+      },
+      "SCALE_MISREADING": {
+        "mechanism": "Non-zero baseline, logarithmic scale, or units in parentheses (thousands, millions) ignored.",
+        "examples": [
+          "M3Q4 (in thousands)",
+          "M4Q47 (millions)"
+        ]
+      },
+      "UNIT_INFERENCE": {
+        "mechanism": "Student correctly reads values but ignores implicit unit transformations — thousands to actuals, percentages to absolutes. Distinct from scale misreading: the unit is not on the axis but implicit in the figure title or footnote.",
+        "examples": [
+          "M3Q4 (spending in thousands of euros)",
+          "M4Q47 (population in millions)"
+        ]
+      }
+    },
+    "statement_evaluation_traps": {
+      "PLAUSIBILITY": {
+        "mechanism": "Option sounds consistent with general trends but lacks strict mathematical proof in figure.",
+        "examples": [
+          "M3Q22",
+          "M4Q24"
+        ]
+      },
+      "SCOPE_EXTENSION": {
+        "mechanism": "Mathematically true for specific subset/year stated as universal.",
+        "examples": [
+          "M3Q22 (one month's trend applied globally)"
+        ]
+      },
+      "SINGLE_MODEL_ASSUMPTION": {
+        "mechanism": "Student checks statement against one valid interpretation or single time period, assuming it holds universally without verifying all data partitions.",
+        "examples": [
+          "M3Q22",
+          "M4Q24"
+        ]
+      },
+      "IMPLICIT_PREMISE_INJECTION": {
+        "mechanism": "Student adds unstated rule or real-world assumption to make statement provable, OR assumes insufficient data when proportional data is fully sufficient.",
+        "examples": [
+          "M2Q31 Option B (cannot calculate without knowing volume)",
+          "M3Q4 Option E (insufficient data)"
+        ]
+      },
+      "NEGATION_CONFUSION": {
+        "mechanism": "Misinterpreting inverse/decreasing relationships.",
+        "examples": [
+          "M2Q31 (decreases by 1/17 vs decreases to 1/16)"
+        ]
+      }
+    },
+    "error_frequency_map": {
+      "most_common": "Denominator Shift — calculating percentage from grand total instead of filtered subset",
+      "second_most_common": "Single-Model Assumption — checking one time period and not verifying universality",
+      "third_most_common": "Multi-step Stop — stopping after first calculation, selecting intermediate result",
+      "fourth_most_common": "Unit Inference — ignoring thousands/millions in figure title"
+    }
+  },
+  "time_pressure_anatomy": {
+    "verification_across_models": "Primary time pressure in statement evaluation questions. Time cost = testing each statement against all rows, columns, and valid data partitions. Time bleeds when students test options sequentially against a single column rather than exhaustively scanning all variables.",
+    "figure_navigation_cost": "High when cross-referencing multiple rows and columns to verify conditions. M3Q19 requires checking 5 employees across 4 departments — time lost hunting intersections, not doing arithmetic.",
+    "calculation_chain_length": "M3Q9 requires 4-step chain just to reach the final ratio. Holding intermediate numbers in working memory under time pressure causes chain breaks.",
+    "answer_similarity": "Forces exact calculation. M3Q4 options (25,500 vs 255,000 vs 25,500 thousand) render visual estimation completely useless.",
+    "back_and_forth_cost": "High in conditional questions (M4Q42) — read text condition, check chart, return to text, calculate. Each round trip costs 10-15 seconds.",
+    "low_cost_examples": [
+      "M3Q1",
+      "M1Q23"
+    ],
+    "high_cost_examples": [
+      "M3Q19",
+      "M3Q9",
+      "M4Q42",
+      "M3Q22"
+    ]
+  },
+  "calibrated_uplift": {
+    "layer1_figure_structure": {
+      "increase_complexity_not_arithmetic": "Add time series or multiple locations. Single-year pie → 3-year grouped bar forces temporal isolation before calculation (M1Q29).",
+      "structural_separator": "Segmented sub-categories (M4Q9: 10 age brackets × 4 frequency variables) explode visual navigation cost without increasing arithmetic difficulty.",
+      "easy_to_hard_observation": "Easy: direct figure read. Hard: text rules algebraically modify figure data before calculations begin."
+    },
+    "layer2_cognitive_load": {
+      "extra_navigation_step": "Require student to calculate total from one slice before using that total (M3Q9: must derive 120,000 total from Securities=20%=24,000 before answering).",
+      "text_based_figure_modification": "Do not ask about figure directly. Provide text rules that alter figure data for a hypothetical different period (M3Q19 May 2020 rules on June 2020 table).",
+      "sequential_condition_stacking": "Conditions must be applied in strict order. Dropping order is not the same as dropping a condition — the intermediate result from step 2 feeds into step 3, so an ordering error compounds silently rather than obviously failing."
+    },
+    "layer3_answer_engineering": {
+      "numeric_output_model": {
+        "correct": "Full multi-step derivation",
+        "multi_step_stop_trap": "Result of stopping after step 1 (e.g., 14,400 instead of 3,600)",
+        "reference_period_trap": "Correct method applied to wrong baseline year",
+        "denominator_shift_trap": "Correct numerator, wrong denominator (grand total instead of subset)",
+        "scale_unit_trap": "Missing thousands/millions conversion"
+      },
+      "statement_evaluation_model": {
+        "correct": "Statement strictly true across all data partitions",
+        "scope_trap": "True for one subset/year only",
+        "plausibility_trap": "Plausible but mathematically unverified",
+        "contradiction_trap": "Flatly contradicted by a specific easy-to-miss data point",
+        "verification_burden_trap": "Requires heavy cross-column validation to disprove — designed to bleed time"
+      },
+      "elimination_mapping_rule": "Wrong options must correspond to exact misreading errors, not random numbers. Every distractor maps to a specific traceable perceptual or logical failure."
+    }
+  },
+  "figure_passage_interaction_patterns": {
+    "direct_read": {
+      "description": "Look up single intersection. Low navigation, low error probability.",
+      "examples": [
+        "M1Q23 (Total row direct read)"
+      ]
+    },
+    "comparative_read": {
+      "description": "Compare two calculated values across rows/columns. Medium navigation. Denominator confusion risk.",
+      "examples": [
+        "M4Q47 (% change across all continents)"
+      ]
+    },
+    "derived_read": {
+      "description": "Figure is starting matrix only. Prompt contains algebraic instructions. Tests working memory under conditional text rules. High rule-drop risk.",
+      "examples": [
+        "M3Q19 (less by 10 units compared with...)"
+      ]
+    },
+    "trap_density_zones": {
+      "titles_and_subtitles": "Unit in parentheses hidden in title (M4Q47, M3Q4)",
+      "legends_vs_prompt_text": "Slight phrasing shift between chart legend and question stem (M3Q9: luxury goods vs luxury car)",
+      "time_transitions": "Chart represents Year X, prompt establishes rules for Year Y",
+      "subset_boundaries": "Where the filtered subset ends and the grand total begins — the denominator shift zone"
+    }
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": {
+      "denominator_signals": [
+        "compared to",
+        "relative to",
+        "as a percentage of"
+      ],
+      "subset_signals": [
+        "account for X% of total",
+        "of which",
+        "among those who"
+      ],
+      "bridging_qualifiers": [
+        "maintain the same percentage distribution",
+        "at the same rate as"
+      ],
+      "precision_signals": [
+        "at least",
+        "no more than",
+        "exactly",
+        "approximately"
+      ]
+    },
+    "near_correct_wrong_answers": {
+      "dropped_condition": "Differ by exactly one missing text condition (M3Q9: dropping 1/4 fraction)",
+      "wrong_category_application": "Correct math applied to wrong visual category (M4Q42: 60% of whole vs 60% of subset)",
+      "wrong_period_base": "Correct calculation on wrong year (M4Q47: 2025 vs 2018 base)"
+    },
+    "primary_ambiguity_mechanism": "Bocconi NR ambiguity is an illusion created by cognitive overload. Stems give 3-4 distinct conditions. Working memory drops one. Options are calibrated to catch exactly that dropped condition.",
+    "sequential_condition_stacking": "Ambiguity arises because conditions must be applied in strict order. Dropping order is not the same as dropping a condition — an ordering error compounds silently, producing a result that is numerically plausible but structurally wrong."
+  },
+  "generation_fingerprint": "## NR GENERATION FINGERPRINT\n\nBocconi Numerical Reasoning tests logical validity and data reading precision under time pressure, not mathematical skill. The arithmetic is strictly accessible. Difficulty is driven by structural traps in the figure and conditions, with evil answer choices — options engineered to capture specific perceptual and logical errors. The figure is not mere context — it is the puzzle matrix.\n\nApply the Figure-First Principle: all traps must live in figure structure, not arithmetic. Use the Denominator Shift Trap by asking for a percentage of a filtered subset and providing an option dividing by the grand total. Use the Reference Year Trap by providing a figure for Year X but prompting calculation for Year Y via text rules. Inject the Unit Inference Trap by placing units (thousands, millions) in the figure title or parenthetical — never on the axis itself. Use the Single-Model Assumption Trap in statement evaluation questions by constructing one option true for a single time period but false for others.\n\nFor Calibrated Uplift: Easy questions allow direct figure reads. Hard questions provide bulleted text rules that algebraically modify figure data before calculations begin. Sequential Condition Stacking is the highest-difficulty mechanism — conditions applied in strict order where an ordering error compounds silently rather than obviously failing.\n\nAdhere to the Answer Engineering Model. For numeric questions, apply the Elimination Mapping Rule: one option reflects a Multi-step Stop (intermediate result), one a Reference Period Trap (wrong baseline), one a Denominator Shift, one a Unit Inference error. For statement evaluation questions, one statement is universally true across all data partitions, one is true for a single subset only (scope trap), one is plausible but unverified (implicit premise), and one requires heavy cross-column validation to disprove (verification burden trap). Options must be numerically similar enough to neutralise visual estimation entirely. The test punishes speed-reading and single-model assumptions. It rewards structural discipline and exhaustive verification."
+}

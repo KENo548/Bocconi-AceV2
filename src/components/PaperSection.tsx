@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { GeneratedQuestion } from '../services/gemini';
+import { GeneratedQuestion } from '../services/groq';
 import { sanitizeCurrency, MathText } from '../lib/constants';
 import Markdown from 'react-markdown';
 import remarkMath from 'remark-math';

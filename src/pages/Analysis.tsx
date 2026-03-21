@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useStore, SavedSession } from '../store/useStore';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { BrainCircuit, CheckSquare, Square, Calendar, Target, ListChecks, CheckCircle2 } from 'lucide-react';
 import { formatDate } from '../lib/constants';
 import SessionAnalysis from '../components/SessionAnalysis';

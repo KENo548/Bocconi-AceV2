@@ -1,0 +1,277 @@
+{
+  "topic": "Probability",
+  "approved": false,
+  "question_count": 13,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Permutations and Combinations",
+        "count": 6,
+        "confidence": "HIGH",
+        "refs": [
+          "M1Q20",
+          "M1Q25",
+          "M1Q47",
+          "M2Q8",
+          "M2Q43",
+          "M3Q37"
+        ]
+      },
+      {
+        "name": "Conditional Probability",
+        "count": 4,
+        "confidence": "HIGH",
+        "refs": [
+          "M1Q41",
+          "M2Q25",
+          "M2Q47",
+          "M3Q29"
+        ]
+      },
+      {
+        "name": "Probability Rules",
+        "count": 3,
+        "confidence": "HIGH",
+        "refs": [
+          "M2Q34",
+          "M3Q42",
+          "M4Q19"
+        ]
+      }
+    ],
+    "coverage_assessment": "The dataset heavily biases toward discrete combinatorial probability and basic conditional probability derived from 2x2 contingency tables. It entirely lacks questions on expected value, continuous probability distributions, Bayes' Theorem applied to multi-stage trees, and explicit tests of independent vs. dependent events beyond basic definitions. The profile reliably encodes 2x2 conditional traps and basic combinatorial order vs. selection decisions, but cannot reliably encode the cognitive load of advanced tree diagrams or algebraic probability distributions."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [
+        "M1Q20",
+        "M1Q25",
+        "M1Q41",
+        "M1Q47",
+        "M2Q8",
+        "M2Q25",
+        "M2Q47",
+        "M3Q29",
+        "M3Q37"
+      ],
+      "steps_required": "1 to 2 steps. Direct formula application or a single division operation from a table.",
+      "concept_mixing": "None. Pure combinatorics or pure table reading.",
+      "qualifier_sensitivity": "Low. Keywords like 'anagrams' or 'given that' point directly to standard formulas.",
+      "answer_similarity": "High structural variation. Wrong answers are wild miscalculations, raw totals, or unadjusted permutations."
+    },
+    "medium": {
+      "refs": [
+        "M2Q34",
+        "M2Q43",
+        "M3Q42",
+        "M4Q19"
+      ],
+      "steps_required": "2 to 3 steps. Sequential dependent probabilities (without replacement) plus addition rule, or algebraic manipulation of probability bounds.",
+      "concept_mixing": "Moderate. Combines independent probability calculation with mutually exclusive pathway addition (M2Q34), or slot-filling with asymmetric restrictions (M2Q43).",
+      "qualifier_sensitivity": "High. Missed constraints ('without replacement', interval bounds like 2000-9999) immediately lead to trap answers.",
+      "answer_similarity": "Extremely tight. Options include the exact outputs of forgetting constraints or missing a step."
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "2 to 3 steps. Retains the same mechanical length as Medium but demands flawless logical execution and precise constraint verification.",
+      "concept_mixing": "Uses the same familiar structures (2x2 tables, combinatorics) but introduces multiple overlapping conditional constraints that must be parsed simultaneously.",
+      "qualifier_sensitivity": "Extreme. Single-word shifts dictate whether to apply a combination or permutation, or whether to restrict the denominator.",
+      "answer_similarity": "All choices are plausible unless constraints are fully verified. Answers are indistinguishable unless reasoning is exact, featuring numerically close or structurally similar outputs mapped to near-miss logical errors."
+    }
+  },
+  "trap_and_error_architecture": {
+    "traps": [
+      {
+        "name": "Wrong Denominator (Conditional Probability)",
+        "mechanism": "Students read the target intersection but divide by total population N instead of the restricted sample space dictated by the 'given that' condition.",
+        "refs": [
+          "M1Q41",
+          "M2Q47",
+          "M3Q29"
+        ],
+        "name_normalized": "WRONG_DENOMINATOR_CONDITIONAL_PROBABILITY"
+      },
+      {
+        "name": "Order/Selection Confusion",
+        "mechanism": "Applying permutation formulas P(n,k) where order does not matter, yielding vastly inflated numbers, or vice versa.",
+        "refs": [
+          "M1Q47",
+          "M3Q37"
+        ],
+        "name_normalized": "ORDER_SELECTION_CONFUSION"
+      },
+      {
+        "name": "Constraint / Repetition Omission",
+        "mechanism": "In permutations, failing to divide by k! for identical items (anagrams), or failing to restrict the first available slot in a number formation problem.",
+        "refs": [
+          "M1Q25",
+          "M2Q8",
+          "M2Q43"
+        ],
+        "name_normalized": "CONSTRAINT___REPETITION_OMISSION"
+      },
+      {
+        "name": "Incomplete Pathway (Sequential Probability)",
+        "mechanism": "Calculating the probability of one successful sequential path but failing to add the symmetric parallel path.",
+        "refs": [
+          "M2Q34"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "INCOMPLETE_PATHWAY_SEQUENTIAL_PROBABILITY"
+      }
+    ],
+    "data_errors": [
+      {
+        "ref": "M3Q29",
+        "description": "Recorded answer E (32/70) corresponds to P(Male | Party A). Calculating P(Female | Party A) yields 38/70, which is not among the options. This is a suspected table transcription error in the original exam data."
+      },
+      {
+        "ref": "M3Q42",
+        "description": "Standard formula gives P(A|B) = P(A∩B)/P(B) = 0.4/0.8 = 0.5 = 1/2 (option C). Recorded answer is B (3/8). The given values likely contain a typo in the original source. Both discrepancies are flagged and Elimination Mapping follows recorded mechanics."
+      }
+    ],
+    "elimination_mapping": {
+      "M1Q20": {
+        "B": "Sum error — summing all binomial coefficients = 2^10",
+        "C": "Base power error — evaluating 2^5",
+        "D": "Multiplication error — evaluating 5 x 5",
+        "E": "Exponent error — evaluating 5^3"
+      },
+      "M1Q25": {
+        "A": "Repetition omission — 5! without dividing by 2!",
+        "C": "Miscounting N — evaluating 6!",
+        "D": "Replacement error — evaluating 5^5",
+        "E": "Arithmetic error — halving 100 instead of 120"
+      },
+      "M1Q41": {
+        "B": "Ratio error — comparing target to other sub-group (7/18)",
+        "C": "Complement ratio error",
+        "D": "Wrong denominator — dividing by total N=200",
+        "E": "Base rate neglect — guessing 50/50"
+      },
+      "M1Q47": {
+        "A": "Permutation of all — 10!",
+        "C": "Order/selection confusion — calculating P(10,5) = 30,240",
+        "D": "Replacement error — calculating 10^5",
+        "E": "Multiplication error — 10 x 5"
+      },
+      "M2Q8": {
+        "A": "Replacement error — evaluating 5^5",
+        "B": "Base error — using alphabet size 26^5",
+        "C": "Partial repetition omission — dividing by only one 2!",
+        "E": "Repetition omission — 5! ignoring both repeated pairs"
+      },
+      "M2Q25": {
+        "A": "Independence confusion — assuming P(A|B) = P(A)",
+        "B": "Subset confusion — assuming A implies B so P(A|B) = 1",
+        "D": "Definition inversion — P(A∩B) > 0 contradicts mutual exclusivity",
+        "E": "De Morgan's error — misapplying complement rules"
+      },
+      "M2Q34": {
+        "A": "Replacement error — calculating (1/2)^3 = 12.5%",
+        "C": "Incomplete pathway — calculated only P(3 Red) = 5%",
+        "D": "Complement error of partial pathway",
+        "E": "Miscounting pathways"
+      },
+      "M2Q43": {
+        "B": "Constraint omission — allowing first digit to be 1, calculating 9x9x8x7 = 4,536",
+        "C": "Arithmetic error",
+        "D": "Permutation error — calculating P(9,4) ignoring zero",
+        "E": "Unrestricted permutation — calculating P(10,4) = 5,040"
+      },
+      "M2Q47": {
+        "A": "Wrong row/col — P(over 40 | office)",
+        "C": "Arithmetic averaging error",
+        "D": "Wrong denominator — P(under 40 AND office) / total 100 = 20%",
+        "E": "Wrong row/col inverse"
+      },
+      "M3Q29": {
+        "A": "Wrong grouping — Male Party B / Party A total",
+        "B": "Wrong condition — Male Party A / Total Male",
+        "C": "Wrong denominator — Male Party A / Total N=100",
+        "D": "Wrong condition — Male Party B / Total Male",
+        "E": "Recorded correct — actually corresponds to P(Male | Party A); suspected transcription error"
+      },
+      "M3Q37": {
+        "A": "Order/selection confusion — evaluating P(9,2) = 72",
+        "C": "Arithmetic error — evaluating 9^2 - 1 = 80",
+        "D": "Miscounted N — evaluating P(10,2) / 2 = 45... or 9x10 = 90",
+        "E": "Base identity error — selecting N=9"
+      },
+      "M3Q42": {
+        "A": "Arithmetic fraction inversion",
+        "B": "Recorded correct — suspected source typo; true formulaic answer is C",
+        "C": "True formulaic answer — P(A|B) = 0.4/0.8 = 1/2",
+        "D": "Addition rule failure",
+        "E": "Arithmetic error"
+      },
+      "M4Q19": {
+        "A": "Violation of probability upper bound — includes values > 1",
+        "B": "Violation of maximum intersection logic — P(A∪B) cannot be less than max(P(A),P(B))",
+        "C": "Violation of minimum intersection logic — lower bound is 0.7, not 0.8",
+        "D": "Ignores specific P(A) and P(B) constraints — treats as unconstrained"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "mechanisms": [
+      {
+        "name": "The Combinatorial Fork",
+        "description": "Time is consumed determining whether order matters and whether replacement occurs. Choosing the wrong fork immediately leads to a present, confident trap answer (M1Q47, M2Q43)."
+      },
+      {
+        "name": "Table Transposition",
+        "description": "In conditional probability tables (M2Q47, M3Q29), the eye must rapidly isolate a single row or column. Time pressure causes horizontal/vertical saccade errors where a student reads a row marginal total but needs a column marginal total, resulting in the Wrong Denominator."
+      },
+      {
+        "name": "Mental Limit Testing",
+        "description": "For theoretical bounds (M4Q19), students cannot calculate a single value. They must rapidly run two hypothetical boundary scenarios (maximum overlap vs minimum overlap) in working memory, doubling the computational back-and-forth cost."
+      }
+    ]
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure. NOT harder problems in the JEE or olympiad sense.",
+    "layer_1_problem_structure_mutation": "Transition from explicit 2x2 visual tables to dense prose matrices (like M1Q41). Instead of providing marginal totals, force the student to calculate them mid-step. Shift combinatorial questions from explicitly stating 'without replacement' to implying it via physical constraints.",
+    "layer_2_cognitive_load_injection": "Introduce asymmetric constraints in combinatorial slots. For example, instead of just '4 digits' (M2Q43), demand 'even 4-digit numbers', forcing parallel tracking of both the first digit restriction (no zero) and the last digit restriction (must be even).",
+    "layer_3_answer_engineering": "MOST WEIGHT. Wrong answers must be precise outputs of expected cognitive failures: the direction trap (include P(B|A) when P(A|B) is requested); necessity vs possibility equivalents in bounds questions (M4Q19 pattern); near-equal numeric traps ensuring students cannot estimate. If combinations are needed, the permutation result must be present. If finding a restricted conditional probability, the joint probability over total N must be present."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 1,
+    "figure_refs": [
+      "M3Q29"
+    ],
+    "table_trap_mechanism": "The 2x2 contingency table format places the global total N in the bottom-right cell. Visual gravity of the bottom-right draws the eye, causing the Wrong Denominator error. When a conditional constraint is applied ('given they vote for party A'), the correct denominator is a marginal row or column total, not the corner value.",
+    "prose_equivalent": "Prose questions (M1Q41) embed the exact same structural risk by distributing the global total N=200 in the opening sentence, anchoring it in working memory before the 'given that' constraint is introduced. The cognitive trap is identical — just visual vs. verbal anchoring."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": {
+      "conditional_signals": [
+        "given that",
+        "given",
+        "if"
+      ],
+      "counting_signals": [
+        "without replacement",
+        "with replacement",
+        "exactly",
+        "at least",
+        "at most"
+      ],
+      "event_type_signals": [
+        "mutually exclusive",
+        "independent",
+        "complementary"
+      ],
+      "ordering_signals": [
+        "arrangement",
+        "order matters",
+        "distinct",
+        "identical"
+      ]
+    },
+    "primary_ambiguity_mechanism": "Role reversal in conditional phrasing. Natural language rapidly shifts the subject and the condition (e.g., 'probability that a candidate passed given they attended' vs 'probability of a passing candidate having attended'). This drives subset vs population ambiguity, forcing students to decide whether to divide by a restricted subset or the global population N.",
+    "near_correct_construction": "Second-closest wrong options are generated by missing exactly one qualifier, producing near-equal numeric traps (e.g., using (1/2)^3 instead of dependent fractions, or dividing an anagram count by 2! instead of 2!x2!)."
+  },
+  "generation_fingerprint": "## PROBABILITY GENERATION FINGERPRINT\n\nBocconi Probability generation must ruthlessly optimize for precision under pressure. The dataset exhibits a dominant Easy bias (9 Easy / 4 Medium / 0 Hard). Thus, the primary difficulty driver is not the probability structure itself, but the precision required to distinguish between answer choices engineered from specific reasoning errors, often producing numerically or structurally similar results. Bocconi difficulty relies on familiar problems with answer choices that are all plausible and indistinguishable unless reasoning and constraint verification are exact.\n\nThe skeletal structure relies heavily on two formats:\n\nThe 2x2 Conditional Matrix: Whether presented visually (M2Q47, M3Q29) or in prose (M1Q41), the high-leverage mechanic is the Wrong Denominator trap, driven by subset vs population ambiguity. The problem isolates a subgroup, but distractors aggressively feature the total population N or the inverted condition (direction trap).\n\nThe Combinatorial Fork: Questions (M1Q25, M1Q47, M2Q43) present counting scenarios where the student must decide whether order matters. The wrong options are exact outputs of the incorrect forks — specifically the Order/Selection confusion and Constraint/Repetition Omission.\n\nA unique structural pattern is the Boundary Range Theoretical Question (M4Q19). This tests abstract probability rules by asking for the logical range of P(A∪B) given isolated probabilities, testing necessity vs possibility rather than computing a single value.\n\nData hygiene note: The dataset contains two suspected transcription errors — M3Q29 recorded Male instead of Female, and M3Q42 recorded an incorrect algebraic output. Generators must ensure rigid validation of the intended correct option.\n\nTo emulate Bocconi style, keep setups familiar. Every wrong option must strictly map to a defined cognitive error (failing to divide by a repetition, conditional role reversal, or calculating half a symmetric tree), ensuring distractors mirror the exact logical missteps candidates make under time pressure.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

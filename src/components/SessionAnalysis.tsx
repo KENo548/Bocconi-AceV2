@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { SavedSession, QuestionResult } from '../store/useStore';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/Card';
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { BrainCircuit, Clock, Target, TrendingUp, AlertTriangle, Zap, MinusCircle } from 'lucide-react';
 import {
     Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,

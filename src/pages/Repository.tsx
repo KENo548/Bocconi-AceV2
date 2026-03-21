@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useStore, SavedPaper } from '../store/useStore';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/Card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { FileText, Trash2, Calendar, ArrowLeft, Download, Loader2 } from 'lucide-react';
-import { Button } from '../components/ui/Button';
+import { Button } from "@/components/ui/button";
 import PaperSection from '../components/PaperSection';
 import { toPng } from 'html-to-image';
 import jsPDF from 'jspdf';

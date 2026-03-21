@@ -1,0 +1,252 @@
+{
+  "topic": "Functions",
+  "approved": false,
+  "question_count": 10,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Graph/Table Matching",
+        "count": 4,
+        "confidence": "HIGH",
+        "refs": [
+          "M1Q42",
+          "M2Q4",
+          "M3Q7",
+          "M3Q23"
+        ]
+      },
+      {
+        "name": "Parameter Solving from Functional Values",
+        "count": 2,
+        "confidence": "MED",
+        "refs": [
+          "M1Q49",
+          "M4Q31"
+        ]
+      },
+      {
+        "name": "Domain and Range",
+        "count": 2,
+        "confidence": "MED",
+        "refs": [
+          "M3Q12",
+          "M4Q40"
+        ]
+      },
+      {
+        "name": "Function Properties (Symmetry)",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M3Q32"
+        ]
+      },
+      {
+        "name": "Asymptotes",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M1Q36"
+        ]
+      }
+    ],
+    "coverage_assessment": "The Bocconi dataset for Functions reflects an extremely elementary algebra syllabus, completely missing composite functions f(g(x)), inverse functions, piecewise definitions, and logarithmic functions. The profile reliably encodes the translation between geometric features (concavity, intercepts) and algebraic parameters, as well as deterministic parameter solving. It distinctly separates conceptual property checks (symmetry) from procedural evaluation. However, the complete absence of Hard questions limits the ability to encode how Bocconi scales difficulty using advanced algebraic manipulation. This module tests precision in foundational constraints (boundaries, asymptotes, a^0=1) rather than problem-solving depth."
+  },
+  "difficulty_ladder": {
+    "note": "Extreme Easy bias: 8 Easy / 2 Medium / 0 Hard. The most extreme undercalibration across all topics. The Hard tier is entirely extrapolated from Medium structural patterns combined with Calibrated Uplift rules.",
+    "easy": {
+      "refs": [
+        "M1Q36",
+        "M1Q42",
+        "M2Q4",
+        "M3Q12",
+        "M3Q23",
+        "M3Q32",
+        "M4Q31",
+        "M4Q40"
+      ],
+      "steps_required": "1 to 2 (e.g., verify a symmetry property, evaluate an endpoint, isolate a denominator)",
+      "concept_mixing": "None. Single-concept isolation.",
+      "qualifier_sensitivity": "Low. Direct binary conditions ('NOT defined', 'NOT an even function').",
+      "answer_similarity": "High contrast. Options feature disjoint integer intervals or entirely different functional families."
+    },
+    "medium": {
+      "refs": [
+        "M1Q49",
+        "M3Q7"
+      ],
+      "steps_required": "3 to 4 (extract visual features, set up simultaneous equations, solve, re-evaluate)",
+      "concept_mixing": "Algebraic parameterisation of visual data (mapping concavity and intercept signs to quadratic coefficients)",
+      "qualifier_sensitivity": "Medium. Relies on checking multiple simultaneous constraints.",
+      "answer_similarity": "Deceptive. Options share identical terms but differ by single coefficient signs (+x vs -x)."
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "5+ (extracting parameters from an unlabelled graph to form a rational function, determining asymptotes, finding range)",
+      "concept_mixing": "Domain restrictions heavily layered with composite evaluation and parameter solving",
+      "qualifier_sensitivity": "High. Strict reliance on open vs closed inequalities and domain boundaries.",
+      "answer_similarity": "Feature-isolated options — wrong options correctly match one advanced feature but fail a subtle boundary constraint."
+    }
+  },
+  "trap_and_error_architecture": {
+    "traps": [
+      {
+        "name": "Partial Feature Matching Trap",
+        "mechanism": "Students correctly identify one graphical feature (e.g., downward concavity) but ignore secondary constraints (domain limits, specific coordinates, y-intercept). They select the first mathematically plausible option that matches their single observed feature.",
+        "refs": [
+          "M3Q7",
+          "M3Q23"
+        ],
+        "name_normalized": "PARTIAL_FEATURE_MATCHING_TRAP"
+      },
+      {
+        "name": "Range of Quadratic on Closed Interval Trap",
+        "mechanism": "Assuming the minimum and maximum of a parabola on an interval occur strictly at the boundaries, completely ignoring the interior vertex.",
+        "refs": [
+          "M3Q12"
+        ],
+        "exact_values": "Evaluating x^2-1 on [-2,1]. Endpoints yield 3 and 0. The true minimum is at the vertex x=0, yielding -1.",
+        "name_normalized": "RANGE_OF_QUADRATIC_ON_CLOSED_INTERVAL_TRAP"
+      },
+      {
+        "name": "Coefficient Sign / Feature Mismatch Trap",
+        "mechanism": "Misaligning visual graph features with algebraic parameters, such as confusing upward concavity with a negative x^2 coefficient.",
+        "refs": [
+          "M3Q7"
+        ],
+        "name_normalized": "COEFFICIENT_SIGN___FEATURE_MISMATCH_TRAP"
+      },
+      {
+        "name": "Zero Exponent Evaluation Trap",
+        "mechanism": "Evaluating a^0 as 0 instead of 1 when solving exponential systems, cascading into incorrect parameter derivation.",
+        "refs": [
+          "M4Q31"
+        ],
+        "name_normalized": "ZERO_EXPONENT_EVALUATION_TRAP"
+      },
+      {
+        "name": "Insufficient Data Meta-Trap",
+        "mechanism": "Offering a bailout option for non-linear two-variable systems. Students lacking confidence in substitution falsely believe the system is underdetermined.",
+        "refs": [
+          "M1Q49"
+        ],
+        "name_normalized": "INSUFFICIENT_DATA_META_TRAP"
+      }
+    ],
+    "elimination_mapping": {
+      "M1Q36": {
+        "A": "Evaluates ratio of leading coefficients but assigns it to Vertical Asymptote instead of Horizontal",
+        "B": "Conceptual failure to recognize rational function properties — assumes no asymptotes exist",
+        "C": "Calculates numerator root (x=3) and assigns it to Horizontal Asymptote",
+        "D": "Calculates numerator root (x=3) and assigns it to Vertical Asymptote"
+      },
+      "M1Q42": {
+        "B": "Fails Pythagorean identity — assumes sum of squares oscillates between 0 and 2",
+        "C": "Evaluates constant 1 but confuses it with the linear function y=x",
+        "D": "Fails Pythagorean identity — assumes standard sine wave between -1 and 1",
+        "E": "Fails Pythagorean identity — assumes irregular oscillation"
+      },
+      "M1Q49": {
+        "A": "Fraction mishandling during the substitution phase",
+        "B": "Meta-trap — falsely believes the non-linear system is unsolvable with two data points",
+        "D": "Uses linear interpolation instead of solving ax + b/x",
+        "E": "Sign error during subtraction of simultaneous equations"
+      },
+      "M2Q4": {
+        "A": "Fails verification: fits x=0, fails x=1",
+        "B": "Fails verification: fits x=0, fails x=1 (linear overshoot at x=2)",
+        "C": "Fails verification: fails at x=0",
+        "D": "Fails verification: fits x=0 and x=1, fails at x=2"
+      },
+      "M3Q7": {
+        "A": "Negative x^2 coefficient — misreads upward concavity as negative; also negative constant",
+        "C": "Positive x^2 (correct) but negative constant — misreads y-intercept as below zero",
+        "D": "Negative x^2 coefficient — misreads upward concavity as negative",
+        "E": "Positive x^2 (correct) but negative constant — misreads y-intercept as below zero"
+      },
+      "M3Q12": {
+        "B": "Sign inversion when evaluating negative squares; evaluates endpoints only",
+        "C": "Calculates unadjusted x^2 range [0,4], forgets to apply the -1 translation",
+        "D": "Sign inversion error producing negative range",
+        "E": "Evaluates endpoints only [-2 and 1], missing the interior minimum at x=0"
+      },
+      "M3Q23": {
+        "A": "Fails to check domain constraint — 1/x is undefined at x=0",
+        "B": "Misreads concavity — x^2 is concave up, not down",
+        "D": "Partial match error — passes through (0,0) but fails to pass through (1,1)",
+        "E": "Misreads curvature — f(x)=x is linear, not concave"
+      },
+      "M3Q32": {
+        "A": "Misses the NOT qualifier — x^2-4 is correctly even",
+        "B": "Misses the NOT qualifier — cos x is correctly even",
+        "D": "Misses the NOT qualifier — x^4 is correctly even",
+        "E": "Misses the NOT qualifier — |x| is correctly even"
+      },
+      "M4Q31": {
+        "A": "Incorrect substitution — f(1)=3+3=6≠5",
+        "B": "Zero exponent trap — evaluates a^0=0 giving b=3, then a+3=5 → a=2",
+        "C": "Incorrect elimination — adds instead of subtracts constants",
+        "D": "Sign inversion when isolating parameters"
+      },
+      "M4Q40": {
+        "B": "Valid domain value (x=-2 is boundary, included) — misses NOT qualifier",
+        "C": "Valid domain value — misses NOT qualifier",
+        "D": "Valid domain value (x=1 is boundary, included) — misses NOT qualifier",
+        "E": "Valid domain value — misses NOT qualifier"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "mechanisms": [
+      {
+        "name": "Option Scanning Cost",
+        "description": "The primary time sink. Students must constantly scan 5 highly similar algebraic expressions. Comparing tiny structural differences (+x vs -x, +1 vs -1) creates severe visual parsing load."
+      },
+      {
+        "name": "Visual-to-Algebraic Mode Switching",
+        "description": "Translating a parabola's shape into ±x^2 and its visual y-intercept into ±C (M3Q7) requires holding graphical features in working memory while evaluating textual equations."
+      },
+      {
+        "name": "Iterative Verification Tax",
+        "description": "M2Q4 requires testing multiple coordinates against multiple polynomials. Attempting this mentally rather than via written elimination punishes working memory."
+      },
+      {
+        "name": "Non-Linear System Solving",
+        "description": "M1Q49 requires substituting fractions (b/x) into simultaneous equations. Managing this fraction arithmetic under a time limit forces deterministic processing errors."
+      }
+    ]
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure. NOT harder problems in the JEE or olympiad sense.",
+    "layer_1_problem_structure_mutation": "Shift given information from explicit coordinates to relational constraints (e.g., f(2)=2*f(1)). Remove axis tick marks entirely from graphs to force pure qualitative reasoning over feature extraction.",
+    "layer_2_cognitive_load_injection": "Require finding an algebraic domain before checking boundary vertices. Instead of giving a closed interval explicitly (like [-2,1]), bury it inside a secondary square root function restriction.",
+    "layer_3_answer_engineering": "MOST WEIGHT. Every wrong option must isolate a specific, deterministic student error. A correct 5-option Bocconi Functions question must follow this exact feature-isolation blueprint: Option A (Correct). Option B (Partial Feature Match 1): correct concavity + wrong intercept sign. Option C (Partial Feature Match 2): correct intercept sign + wrong concavity direction. Option D (Domain/Boundary Error): mathematically fits the shape but violates a visual domain constraint. Option E (Structural Decomposition Trap): maps the wrong structural piece (e.g., the numerator root) to the property being asked about."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 4,
+    "figure_refs": [
+      "M1Q42",
+      "M2Q4",
+      "M3Q7",
+      "M3Q23"
+    ],
+    "core_mechanic": "Graph Matching under underspecified conditions. Because graphs lack fully labelled Cartesian grids, students are forced to isolate visual features sequentially.",
+    "primary_failure_mode": "Partial Feature Matching — matching the first correct feature (e.g., downward curvature) and selecting the first mathematical option that fits it, ignoring intercept or domain coordinates.",
+    "visual_error_clusters": "Traps universally cluster around concavity misinterpretation and missing domain boundaries (curves terminating or originating at the axes).",
+    "distractor_engineering": "Distractors are cleanly engineered to match specific misreads. A student who misreads a y-intercept as negative will find options perfectly tailored to that mistake, complete with opposing concavities."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "can represent",
+      "NOT defined",
+      "NOT an even function",
+      "Insufficient data"
+    ],
+    "primary_ambiguity_mechanism": "Underspecified graphs leading to multiple plausible mappings. Bocconi Functions graphs are not exact Cartesian grids — they lack tick marks and specific scale data. Because the graphs are underspecified, multiple algebraic options look initially viable, forcing students to rely on qualitative relative features (intercept sign, concavity direction) and compare 5 nearly identical options.",
+    "near_correct_construction": "Second-closest wrong options share all structural features with the correct answer except one sign flip (e.g., +x vs -x in the linear term, or +3 vs -1 in the constant term)."
+  },
+  "generation_fingerprint": "## FUNCTIONS GENERATION FINGERPRINT\n\nBocconi Functions questions exhibit extreme Easy bias (8/10). The primary difficulty driver is the precision required to distinguish between structurally similar answer choices, not the complexity of the function itself. Difficulty is not generated via complex formulas; it is entirely driven by exact, engineered answer choice precision. The dominant structural pattern is graph-to-algebra matching based on underspecified graphs. Because visual inputs lack strict scaling, multiple mappings appear plausible, forcing heavy reliance on qualitative feature translation.\n\nTo accurately replicate this dataset, generators must enforce a strict Option-Role System. Every single wrong option must isolate a specific, deterministic student error. The Partial-Match Trap is the primary figure mechanic: one option must feature correct concavity but a wrong intercept; another must feature a correct intercept but wrong concavity; another must fit the shape but fail a domain boundary constraint.\n\nThe Asymptote Decomposition Pattern (M1Q36) must be rigorously applied to algebraic questions. Every structural piece of a rational function (numerator root, denominator root, leading coefficient ratio) must serve as an independent wrong option tied to a mismatched asymptote property.\n\nFor parameter solving, the Zero-Exponent Trap (a^0=0) and deterministic fraction mishandling must generate clean integer distractors. The 'Insufficient Data' option functions as a psychological meta-trap for non-linear simultaneous systems. For interval questions, apply the Range-of-Quadratic Trap: the correct minimum/maximum must occur at the interior vertex, while wrong options are engineered solely from evaluating the interval endpoints.\n\nGeneral, random-error distractors are strictly forbidden. Every option is an engineered, traceable trap.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

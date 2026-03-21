@@ -1,0 +1,285 @@
+{
+  "topic": "Analytical Geometry",
+  "approved": false,
+  "question_count": 10,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Lines — Intersection (solve system)",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M1Q18"
+        ]
+      },
+      {
+        "name": "Lines — Graph to Equation",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M1Q32"
+        ]
+      },
+      {
+        "name": "Lines — Parallel Line Construction",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M2Q39"
+        ]
+      },
+      {
+        "name": "Lines — Coincident Lines Recognition",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M3Q43"
+        ]
+      },
+      {
+        "name": "Lines — Intersection Count via Slopes",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M4Q35"
+        ]
+      },
+      {
+        "name": "Coordinate Geometry — Midpoint / Symmetry",
+        "count": 2,
+        "confidence": "MED",
+        "refs": [
+          "M3Q30",
+          "M4Q11"
+        ]
+      },
+      {
+        "name": "Coordinate Geometry — Distance Formula",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M2Q36"
+        ]
+      },
+      {
+        "name": "Area on Cartesian Plane",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M1Q4"
+        ]
+      },
+      {
+        "name": "Circles — Centre Identification",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M1Q19"
+        ]
+      }
+    ],
+    "coverage_assessment": "The geometry tested is overwhelmingly linear and strictly foundational, relying on 5 structurally distinct linear generators. There is a complete absence of advanced conic sections beyond a single basic circle question. Advanced mechanics — distance from a point to a line, angle between lines, locus problems — are missing entirely. The blueprint tests basic algebraic execution on coordinate grids, using answer-choice engineering rather than geometric complexity to generate difficulty."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [
+        "M1Q18",
+        "M1Q19",
+        "M2Q36",
+        "M2Q39",
+        "M3Q30",
+        "M3Q43",
+        "M4Q11",
+        "M4Q35"
+      ],
+      "steps_required": "1 to 2 steps (low compute)",
+      "concept_mixing": "Low but present — algebra to geometry translation (representation switching)",
+      "qualifier_sensitivity": "Low. Direct commands ('intersect at', 'parallel to')",
+      "answer_similarity": "Asymmetric — Easy questions are solvable fast (low compute) but verification is slow (high verification cost) due to extreme sign permutations in the options"
+    },
+    "medium": {
+      "refs": [
+        "M1Q4",
+        "M1Q32"
+      ],
+      "steps_required": "3 steps (e.g., visual extraction → compute slope → rearrange form)",
+      "concept_mixing": "Moderate. Mode-switching between graphical grid extraction and algebraic structuring",
+      "qualifier_sensitivity": "Low. Visually bounded constraints.",
+      "answer_similarity": "High. Correct mathematical results are algebraically disguised (standard vs slope-intercept form)"
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "4+ steps",
+      "concept_mixing": "High. Mixing non-linear shapes with linear systems.",
+      "qualifier_sensitivity": "High. Strict geometric constraint reliance.",
+      "answer_similarity": "Extreme. Deep factoring required to distinguish."
+    }
+  },
+  "trap_and_error_architecture": {
+    "traps": [
+      {
+        "name": "The Sign-Flip Trap (Defining Architecture)",
+        "mechanism": "THE central generator rule. Distractors are constructed by systematically flipping the signs of x, y, slopes, or constants, preying directly on operator ambiguity with negatives.",
+        "refs": [
+          "M1Q18",
+          "M1Q32",
+          "M2Q39",
+          "M3Q30",
+          "M4Q11"
+        ],
+        "name_normalized": "THE_SIGN_FLIP_TRAP_DEFINING_ARCHITECTURE"
+      },
+      {
+        "name": "Form-Mismatch Trap",
+        "mechanism": "The student calculates the correct equation (y=mx+q) but the correct option is disguised in standard form (ax+by+c=0). Distractors feature the correct y-intercept but wrong slopes in the familiar slope-intercept form.",
+        "refs": [
+          "M1Q32"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "FORM_MISMATCH_TRAP"
+      },
+      {
+        "name": "Parallel-Constraint Trap",
+        "mechanism": "Distractors use explicit erroneous paths: retaining the correct slope m but miscalculating constant k, using the perpendicular slope (-1/m), confusing perpendicular by using -m, or flipping the sign of the original slope.",
+        "refs": [
+          "M2Q39"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "PARALLEL_CONSTRAINT_TRAP"
+      },
+      {
+        "name": "Midpoint-Reversal Trap",
+        "mechanism": "The question asks for a point's reflection (2P-A). Distractors are mathematically mapped to swapping variables, summing coordinates instead of reflecting, or applying the wrong coordinate delta.",
+        "refs": [
+          "M4Q11"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "MIDPOINT_REVERSAL_TRAP"
+      },
+      {
+        "name": "Coincident Lines Trap",
+        "mechanism": "Three identical lines are presented in unsimplified, differently scaled equations. The trap relies on the visual assumption that distinct equations = distinct lines.",
+        "refs": [
+          "M3Q43"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "COINCIDENT_LINES_TRAP"
+      }
+    ],
+    "elimination_mapping": {
+      "M1Q4": {
+        "A": "Miscomputes the two diagonals as Δx=4,Δy=4→4√2 and Δx=3,Δy=3→3√2, then erroneously adds them",
+        "B": "Computes false bounding box area using inner coordinates (4-1)×(4-1) = 9",
+        "C": "Misreads all grid deltas as Δx=2,Δy=2, calculating perimeter of a false square (4×2√2)",
+        "E": "Exactly half the true area — dropped the multiplier on the bounding box subtraction"
+      },
+      "M1Q18": {
+        "A": "Sign-flip permutation of correct coordinates (-1,-2)",
+        "C": "Sign-flip permutation of correct coordinates (1,2)",
+        "D": "Assumed parallel due to substitution sign error leading to 0y=c",
+        "E": "Sign-flip permutation of correct coordinates (1,-2)"
+      },
+      "M1Q19": {
+        "B": "Psychological bailout — Insufficient Data meta-trap",
+        "C": "Completed square to (y-1)^2 but failed to flip sign when extracting centre → (0,-1)",
+        "D": "Swapped x and y variables → (-1,0)",
+        "E": "Swapped x and y variables → (1,0)"
+      },
+      "M1Q32": {
+        "A": "Arbitrary hyperbola matching x=4 and y=2 intercepts (xy=8)",
+        "B": "Wrong slope magnitude translated into standard form (2x+y-4=0, slope -2)",
+        "C": "Correct intercept, flipped slope magnitude (y=-2x+2, m=-2)",
+        "E": "Correct intercept, flipped slope sign (y=x/2+2, m=+1/2)"
+      },
+      "M2Q36": {
+        "A": "Partial perimeter — dropped one side or miscomputed base as Δy=2 → 12",
+        "B": "Miscomputed base as Δy of top points 7-3=4 → 5+5+4=14",
+        "D": "Operator error on base 7+3=10 → 5+5+10=20",
+        "E": "Mis-evaluated root √25→4 → 4+4+8=16"
+      },
+      "M2Q39": {
+        "B": "Sign-flipped slope, original constant retained (3y+x+1=0)",
+        "C": "Perpendicular slope -3, passing through (1,1) (y+3x-4=0)",
+        "D": "Confused perpendicular, slope 3, passing through (1,1) (y-3x+2=0)",
+        "E": "Sign-flipped slope -1/3, passing through (1,1) (3y+x-4=0)"
+      },
+      "M3Q30": {
+        "A": "Direct sum (x1+x2, y1+y2), dropped the /2 → (2,-6)",
+        "B": "Applied distance delta (x2-x1, y2-y1) → (2,5) or (-4,10)/2",
+        "D": "Sign-flip permutation → (1,3)",
+        "E": "Sign-flip permutation → (-1,-3)"
+      },
+      "M3Q43": {
+        "B": "Assumes 3 distinct non-parallel lines → one intersection point",
+        "C": "Assumes inconsistent system (parallel) → no intersection",
+        "D": "Visualizes triangle from 3 pairwise intersections → three points",
+        "E": "Visualizes 2 parallel cut by transversal → two points"
+      },
+      "M4Q11": {
+        "A": "Correct formula for x (2Px-Ax=4), erroneously subtracted Ax instead of Ay for y (2Py-Ax=6) → (4,6)",
+        "C": "Simple sum for both coordinates (Px+Ax, Py+Ay) → (5,5)",
+        "D": "Simple sum for x (Px+Ax=5), erroneously subtracted Ax for y (2Py-Ax=6) → (5,6)",
+        "E": "Simple sum for x (Px+Ax=5), correct formula for y (2Py-Ay=7) → (5,7)"
+      },
+      "M4Q35": {
+        "A": "Assumes identical slopes due to sign error in isolation → infinite intersections",
+        "B": "Geometrically impossible guess for two straight lines",
+        "C": "Geometrically impossible guess for two straight lines",
+        "E": "Assumes parallel slopes due to sign error in isolation → 0 intersections"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "description": "Cognitive load in Analytical Geometry is heavily shifted toward end-stage verification. The algebraic operations (midpoint, substitution) take very few seconds. However, the test induces a micro-hesitation at the option scan stage — because distractors look almost correct due to engineered sign permutations. Students cannot use approximation or spatial intuition to quickly verify; they are forced to recalculate algebraically. Time is systematically lost in the back-and-forth friction of checking standard-form options against slope-intercept scratchpad work, and in mode-switching between visual grid representation and purely algebraic processing.",
+    "mechanisms": [
+      {
+        "name": "End-Stage Verification Cost",
+        "description": "Primary time sink. Sign-permuted options force full recalculation at the option scan stage rather than allowing quick estimation."
+      },
+      {
+        "name": "Form-Switching Friction",
+        "description": "Back-and-forth cost of checking standard-form options (ax+by+c=0) against slope-intercept scratchpad work (y=mx+q), especially in M1Q32."
+      },
+      {
+        "name": "Representation Mode-Switching",
+        "description": "Translating visual grid coordinates into algebraic equations (M1Q4, M1Q32) requires holding graphical features in working memory while executing algebraic steps."
+      }
+    ]
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure. NOT harder problems in the JEE or olympiad sense.",
+    "layer_1_problem_structure_mutation": "Mask standard inputs (e.g., provide a point and its reflection instead of two points to find a midpoint). Present the question as identifying a property rather than computing a value.",
+    "layer_2_cognitive_load_injection": "Present all equations in non-standard forms with common denominators that need clearing to artificially inflate compute time.",
+    "layer_3_answer_engineering": "MOST WEIGHT. Distractor generation must be strictly deterministic by category. For coordinate answers: primary generation via sign-flip matrix, supplemented by 1 structural distractor (e.g., (x,y), (-x,y), (x,-y) plus one applied delta error). For equation answers: generate options using slope sign flip (-m), slope magnitude distortion (1/m), perpendicular trap (-1/m), and intercept shifts, alongside the correct line in wrong form disguise. For scalar answers: exploit false bounding boxes, shoelace partial sums, vertex ordering errors, dropped terms, and mis-evaluated roots (√25→4). For structure questions: exploit unsimplified algebraic forms to bait wrong visual classifications (parallel vs coincident vs intersecting)."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 2,
+    "figure_refs": [
+      "M1Q4",
+      "M1Q32"
+    ],
+    "core_mechanic": "The figure serves strictly as a coordinate-extraction mechanism. There is no complex spatial geometry requiring visual intuition. Students must locate integer coordinates on a grid to feed an algebraic formula.",
+    "misreading_risk": "Concentrates specifically on slope directions (reading a negative visual slope as positive mathematically) and intercept signs.",
+    "prose_equivalent": "Non-figure questions embed equivalent risk through clusters of negative signs in coordinate pairs and equation constants, which produce the same sign-flip errors without any visual component."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "symmetrical point with respect to",
+      "infinitely many points in common",
+      "parallel to",
+      "don't intersect"
+    ],
+    "primary_ambiguity_mechanism": "Operator ambiguity with negatives. The most lethal ambiguity stems from clusters of negative signs and subtraction operators (e.g., processing -8-2 versus -8+2). This is the primary fuel for the entire deterministic sign-flip system. Secondary: presentation ambiguity — the test routinely hides identical mathematical objects (coincident lines) or correct solutions behind unsimplified algebraic disguises (standard vs slope-intercept forms).",
+    "near_correct_construction": "Second-closest wrong options differ from the correct answer by exactly one sign flip in one coordinate or one coefficient, making them indistinguishable without full recalculation."
+  },
+  "generation_fingerprint": "## ANALYTICAL GEOMETRY GENERATION FINGERPRINT\n\nThe dominant question types comprise 5 structurally distinct linear generators: solving systems for intersections, translating graphs to equations, parallel line construction, coincident identity recognition, and intersection counting via slopes. The skeletal structures strictly avoid multi-step geometric proofs, advanced conics, or complex loci.\n\nThe primary difficulty driver is the precision required to distinguish between answer choices that differ by a single deterministic sign, coefficient, or algebraic rearrangement, not the complexity of the geometry itself.\n\nThe defining architectural principle is the evil answer choices principle: every distractor must map to a highly specific, deterministic algebraic error. The sign-flip trap is the foundational answer-engineering mechanic. It preys on operator ambiguity with negatives. For coordinate answers, primary generation operates via the sign-flip matrix, typically supplemented by 1 structural distractor if needed.\n\nBeyond sign flips, distinct structural traps map to their subtopics: the form-mismatch trap (correct line algebraically rearranged, wrong slopes in slope-intercept form as distractors); the parallel-constraint trap (deploying exact mistaken formulas such as the confused perpendicular slope -1/m or retaining the original constant k); the coincident lines trap (providing identical lines in differently scaled formats to bait geometric guesses based on unsimplified distinctness); scalar engineering (forcing distance/area distractors derived from false bounding boxes, shoelace partial sums, vertex ordering errors, dropped terms, or mis-evaluated roots such as √25→4).\n\nThe overwhelming Easy bias dictates that generation calibration remains focused on low compute, high verification cost asymmetry. Easy questions are solved fast but verified slowly due to representation switching and option micro-hesitations. General, random-error distractors are strictly forbidden. Every option is an engineered, traceable trap.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

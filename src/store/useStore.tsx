@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { GeneratedQuestion } from '../services/gemini';
+import { GeneratedQuestion } from '../services/groq';
 
 export interface QuestionResult {
   id: string;
@@ -90,8 +90,6 @@ interface StoreContextType {
   chatContext: string | null;
   openChat: (context?: string) => void;
   closeChat: () => void;
-  learnedStyleProfile: string | null;
-  setLearnedStyleProfile: (profile: string | null) => void;
   papers: SavedPaper[];
   addPaper: (paper: SavedPaper) => void;
   deletePaper: (id: string) => void;
@@ -121,10 +119,6 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatContext, setChatContext] = useState<string | null>(null);
 
-  const [learnedStyleProfile, setLearnedStyleProfile] = useState<string | null>(() =>
-    loadFromStorage('bocconi-learned-style', null)
-  );
-
   const [paperBuilderState, setPaperBuilderState] = useState<PaperBuilderState>(() =>
     loadFromStorage('bocconi-paper-builder-state', {
       configs: [{ id: crypto.randomUUID(), topic: "Algebra", difficulty: "Medium", source: "AI" }],
@@ -141,10 +135,6 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     localStorage.setItem('bocconi-papers', JSON.stringify(papers));
   }, [papers]);
-
-  useEffect(() => {
-    localStorage.setItem('bocconi-learned-style', JSON.stringify(learnedStyleProfile));
-  }, [learnedStyleProfile]);
 
   useEffect(() => {
     localStorage.setItem('bocconi-sessions', JSON.stringify(savedSessions));
@@ -234,8 +224,6 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         chatContext,
         openChat,
         closeChat,
-        learnedStyleProfile,
-        setLearnedStyleProfile,
         papers,
         addPaper,
         deletePaper,

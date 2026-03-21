@@ -1,0 +1,157 @@
+{
+  "topic": "Sets",
+  "approved": false,
+  "question_count": 5,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Set operations",
+        "count": 4,
+        "confidence": "HIGH",
+        "refs": [
+          "M1Q22",
+          "M2Q15",
+          "M3Q39",
+          "M4Q8"
+        ]
+      },
+      {
+        "name": "Set properties",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M1Q30"
+        ]
+      }
+    ],
+    "coverage_assessment": "The dataset heavily emphasizes basic set operations (union, intersection, difference, complement) evaluated either through direct numerical definitions or via abstract logical translation. There is a total absence of 3-set Venn diagram word problems, algebraic applications of De Morgan's laws, and cross-topic integrations. The focus is entirely on definition precision and interpreting English qualifiers ('or but not both') into strict set notation."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [
+        "M1Q30",
+        "M3Q39",
+        "M4Q8"
+      ],
+      "steps_required": "1 to 2 steps (direct application of a provided definition or formula)",
+      "concept_mixing": "None. Pure set logic.",
+      "qualifier_sensitivity": "High ('nonempty', 'difference')",
+      "answer_similarity": "Low; numerical gaps or conceptually distinct logical statements"
+    },
+    "medium": {
+      "refs": [
+        "M1Q22",
+        "M2Q15"
+      ],
+      "steps_required": "3 to 5 steps (evaluate multiple sub-conditions, then aggregate)",
+      "concept_mixing": "Basic arithmetic (divisibility rules) combined with set boundaries",
+      "qualifier_sensitivity": "Extremely high ('or but not both', 'false')",
+      "answer_similarity": "High; options match outputs of missed logical steps"
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "5+ steps",
+      "concept_mixing": "Abstract variables within set definitions",
+      "qualifier_sensitivity": "Nested qualifiers",
+      "answer_similarity": "Highly engineered distractors reflecting single-element omissions"
+    }
+  },
+  "trap_and_error_architecture": {
+    "distractor_engine": {
+      "input_structure": "Sets A, B; exclusionary qualifier ('or but not both', 'nonempty')",
+      "correct_transformation": "Apply boundary exclusion: |A|+|B|-2|A∩B| (Symmetric Difference) or 2^n - 1 (Nonempty Subsets)",
+      "finite_distractor_set": [
+        "|A|+|B|-|A∩B| — Pure Union, maps to M1Q22: 47",
+        "|A|+|B| — Naive sum ignoring overlap entirely, maps to M1Q22: 53",
+        "|A|+|B|-3|A∩B| — Over-subtraction error",
+        "2^n — Raw power set missing empty set subtraction, maps to M1Q30: 16",
+        "True statements masquerading as correct when prompt asks 'which is false' (M2Q15: A, C, D, E)"
+      ]
+    },
+    "traps": [
+      {
+        "name": "Symmetric Difference Omission",
+        "mechanism": "Student applies pure union formula |A|+|B|-|A∩B| instead of symmetric difference |A|+|B|-2|A∩B| because they miss the 'but not both' qualifier",
+        "refs": [
+          "M1Q22"
+        ],
+        "name_normalized": "SYMMETRIC_DIFFERENCE_OMISSION"
+      },
+      {
+        "name": "Empty Set Subtraction Omission",
+        "mechanism": "Student computes 2^n total subsets but forgets to subtract the empty set when the question asks for nonempty subsets",
+        "refs": [
+          "M1Q30"
+        ],
+        "name_normalized": "EMPTY_SET_SUBTRACTION_OMISSION"
+      },
+      {
+        "name": "False Qualifier Inversion",
+        "mechanism": "Question asks which statement is false. Students under time pressure select the first statement they confirm as true rather than systematically verifying all options to find the false one",
+        "refs": [
+          "M2Q15"
+        ],
+        "name_normalized": "FALSE_QUALIFIER_INVERSION"
+      }
+    ],
+    "elimination_mapping": {
+      "M1Q22": {
+        "A": "Pure union with intersection subtracted once: (33-6)+(20-6)+6 = 47",
+        "B": "Naive sum with no overlap adjustment: 33+20 = 53",
+        "C": "Multiples of 3 only, no union: 33",
+        "E": "Multiples of 15 only (intersection): 6 — or multiples of 5 only: 20"
+      },
+      "M1Q30": {
+        "A": "Confused subsets with elements — returned n=4",
+        "C": "Used 4^3=64 — wrong base/exponent",
+        "D": "Used n! = 4! = 24 — permutations instead of subsets",
+        "E": "Correct 2^n=16 but forgot to subtract empty set"
+      },
+      "M2Q15": {
+        "A": "True statement — correctly identified A^c = {2,4,6}",
+        "C": "True statement — correctly identified B^c = {1,2,3,4}",
+        "D": "True statement — (A∩B)^c = {5}^c = {1,2,3,4,6}",
+        "E": "True statement — (A∪B)^c = {1,3,5,6}^c = {2,4}"
+      },
+      "M3Q39": {
+        "A": "Overgeneralization — empty intersection does not require A to be empty",
+        "C": "Irrelevant cardinality claim — disjoint sets can have equal size",
+        "D": "Overgeneralization — A = B^c only if A and B partition the universal set",
+        "E": "Overgeneralization — empty intersection does not require B to be empty"
+      },
+      "M4Q8": {
+        "A": "Confused difference with complement — assumed no overlap means empty result",
+        "B": "Returned B-only elements ({5}) instead of A-only elements",
+        "D": "False constraint — the definition works even when B has elements not in A",
+        "E": "Included B-only elements in the result — confused A\\B with A△B"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "description": "Time pressure manifests through translation friction. Converting 'divisible by 3 or by 5 but not by both' into the symmetric difference operation requires deliberate cognitive pausing. M2Q15 forces sequential evaluation of 5 distinct set computations just to find the one false statement, inducing a rush to select the first plausible set."
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure.",
+    "layer_1_problem_structure_mutation": "Taking standard operations (Union) and adding exclusionary boundaries (A \\ B or symmetric difference).",
+    "layer_2_cognitive_load_injection": "Phrasing questions in the negative ('which of the following statements is false').",
+    "layer_3_answer_engineering": "MOST WEIGHT. Every intermediate logical error serves as a distractor. If a formula requires a subtraction step, the unadjusted raw output will exactly match a trap option."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 0,
+    "note": "No figures. The passage equivalent is mathematical notation (A \\ B, A^c). Risk is entirely embedded in notation-to-prose translation. When the prompt provides a definition, the trap centers on boundary edge cases."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "or but not both",
+      "nonempty",
+      "false",
+      "difference",
+      "complement"
+    ],
+    "primary_ambiguity_mechanism": "Qualified language restricts a standard mathematical concept. 'Subsets' becomes 'nonempty subsets.' The standard mathematical 'or' is inclusive; the prompt forces exclusive OR, testing if the student reads the entire sentence.",
+    "near_correct_construction": "Second-closest options match the output of applying the correct formula but with one boundary condition omitted (e.g., pure union instead of symmetric difference, or 2^n instead of 2^n-1)."
+  },
+  "generation_fingerprint": "## SETS GENERATION FINGERPRINT\n\nBocconi Sets evaluates fundamental set definitions against exclusionary language. Difficulty is not driven by Sets theory complexity — it is driven entirely by answer choice engineering around finite boundary omissions. The arithmetic is trivially simple; the challenge is precision in identifying which boundary condition the student is expected to apply.\n\nDominant question types: element counting via inclusion-exclusion (symmetric difference, union, intersection), evaluating logical equivalence of set operations, and counting subsets with constraints (nonempty, proper subsets).\n\nDISTRACTOR ENGINE: Every distractor is the exact numerical output of a specific omission error.\n- Symmetric Difference Omission: student applies pure union |A∪B| = |A|+|B|-|A∩B| instead of |A|+|B|-2|A∩B|. Must appear as a distractor whenever symmetric difference is the correct operation.\n- Empty Set Omission: student computes 2^n instead of 2^n - 1 when counting nonempty subsets.\n- Over-subtraction: student subtracts the intersection three times instead of twice.\n- True-for-False Swap: when the question asks which statement is false, exactly 4 options are true. Time pressure causes students to select the first true option they verify.\n\nANSWER ENGINEERING MODEL: 1 correct (applies all boundary conditions) + 1 symmetric difference omission + 1 empty set omission + 1 over-subtraction + 1 scope shift (applies rule to wrong set).\n\nQUALIFIER INVENTORY: nonempty, proper subset, difference, or but not both, false, complement. These are precision triggers — each one changes the formula applied.\n\nCALIBRATED UPLIFT: Easy = direct numerical set given. Medium = abstract variable sets requiring logical translation of English qualifier. Hard = nested conditions where applying one rule changes the domain for the next.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

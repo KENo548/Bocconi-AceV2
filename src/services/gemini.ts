@@ -1,19 +1,20 @@
 import { Type } from "@google/genai";
-import { generateQuestionFallback } from './groq';
 
-// ── Model routing ─────────────────────────────────────────────────────────────
-// Ingest:              gemini-2.0-flash → gemini-1.5-flash
-// Style Synthesis:     gemini-2.5-pro   → gemini-2.5-flash
-// Question Generation: gemini-2.0-flash → gemini-2.5-flash → Llama 3.3 70B (Groq — see groq.ts)
-// Mistake Analysis:    DeepSeek R1 (Groq) → gemini-2.0-flash
-// Chatbot:             Llama 3.3 70B (Groq) → gemini-2.0-flash
+// ── gemini.ts — Admin / Ingest service (NOT the runtime generation path) ────────
+// Ingest + extraction:  gemini-2.0-flash → gemini-2.5-flash → gemini-1.5-flash
+// Style Synthesis:      gemini-2.5-pro   → gemini-2.5-flash
+// Embeddings:           text-embedding-004 (one-time offline script)
+//
+// Runtime user paths (question generation, chatbot, mistake analysis)
+// are handled by src/services/groq.ts.
 
 const GENERATION_MODEL_PRIORITY = [
   "gemini-2.0-flash",    // Primary
   "gemini-2.5-flash",   // Fallback 1 (Groq Llama added in groq.ts as Fallback 2)
 ];
 
-const INGEST_MODELS    = ["gemini-2.0-flash", "gemini-1.5-flash-latest", "gemini-2.5-flash"];
+// NOTE: "gemini-1.5-flash-latest" is not available on all keys/regions.
+const INGEST_MODELS    = ["gemini-2.0-flash", "gemini-2.5-flash", "gemini-1.5-flash"];
 const SYNTHESIS_MODELS = ["gemini-2.5-pro",   "gemini-2.5-flash"];
 const MISTAKE_ANALYSIS_GEMINI_FALLBACKS = ["gemini-2.0-flash", "gemini-2.5-flash"];
 const CHAT_GEMINI_FALLBACKS             = ["gemini-2.0-flash", "gemini-2.5-flash"];
@@ -223,9 +224,17 @@ export interface MistakeAnalysis {
 export interface QuestionRequest {
   topic: string;
   difficulty: string;
+  requestedUnit?: string;  // optional — if user wants a specific unit
+  isExtrapolated?: boolean; // set by caller if unit is low-coverage
 }
 
-export async function generateQuestions(requests: QuestionRequest[], contextMocks?: GeneratedQuestion[], learnedStyleProfile?: string | null): Promise<GeneratedQuestion[]> {
+export async function generateQuestions(
+  requests: QuestionRequest[],
+  contextMocks?: GeneratedQuestion[],
+  learnedStyleProfile?: string | null,
+  approvedProfiles?: Record<string, TopicProfile>,  // ADD
+  similarExamplesMap?: Record<string, MockQuestion[]>  // ADD — key=topic
+): Promise<Array<GeneratedQuestion & { isExtrapolated?: boolean }>> {
   const questionList = requests
     .map((r, i) => {
       const requiresChart = CHART_TOPICS.has(r.topic) ? " [REQUIRES chartData]" : "";
@@ -246,24 +255,26 @@ export async function generateQuestions(requests: QuestionRequest[], contextMock
     `\n══════════════════════════════════════════════════════════════════════════════\n`
     : "";
 
-  const learnedProfilePrompt = learnedStyleProfile
-    ? `\n══════════════════════════════════════════════════════════════════════════════\n` +
-    `LEARNED STYLE PROFILE (DYNAMIC PATTERN RECOGNITION):\n` +
-    `The following profile has been synthesized across all historically ingested official mock tests. Use this deep pattern synthesis to fine-tune your generation exactly to the Bocconi style.\n\n` +
-    `${learnedStyleProfile}\n` +
-    `══════════════════════════════════════════════════════════════════════════════\n`
-    : "";
+  // Remove global learnedProfilePrompt, replaced with per-topic profiles below
 
-  const promises = requests.map(async (r) => {
+  type GeneratedWithFlags = GeneratedQuestion & { isExtrapolated?: boolean };
+
+  const promises: Array<Promise<GeneratedWithFlags>> = requests.map(async (r) => {
     const requiresChart = CHART_TOPICS.has(r.topic) ? " [REQUIRES chartData]" : "";
+    // Build topic-specific profile injection
+    const profile = approvedProfiles?.[r.topic] ?? null;
+    const examples = similarExamplesMap?.[r.topic] ?? [];
+    const topicProfilePrompt = buildTopicProfilePrompt(profile, examples);
+    const requestedUnitLine = r.requestedUnit ? `Requested unit (must align strongly): ${r.requestedUnit}\n` : '';
     const prompt = `
 ${BOCCONI_STYLE_BIBLE}
-${learnedProfilePrompt}
+${topicProfilePrompt}
 ${contextMocksPrompt}
 
 TASK: Generate 1 question.
 Topic: ${r.topic}
 Difficulty: ${r.difficulty}${requiresChart}
+${requestedUnitLine}
 
 Critical reminders:
 - You MUST return a single valid JSON object exactly matching the schema.
@@ -371,19 +382,13 @@ Critical reminders:
       }
     }
 
-    // Fallback 2: Llama 3.3 70B via Groq
-    if (!questionData) {
-      console.warn(`[API] Both Gemini models failed — trying Llama 3.3 70B (Groq) for ${r.topic}`);
-      questionData = await generateQuestionFallback(r.topic, r.difficulty, prompt);
-    }
-
     if (!questionData) throw new Error(`Failed to generate question: ${lastError}`);
-    return questionData;
+    return r.isExtrapolated ? { ...questionData, isExtrapolated: true } : questionData;
   });
 
   const results = await Promise.allSettled(promises);
   return results
-    .filter((r): r is PromiseFulfilledResult<GeneratedQuestion> => r.status === 'fulfilled')
+    .filter((r): r is PromiseFulfilledResult<GeneratedWithFlags> => r.status === 'fulfilled')
     .map(r => r.value);
 }
 
@@ -480,6 +485,335 @@ Rules:
   if (!text) throw new Error('Failed to analyze mistake');
   return JSON.parse(text) as MistakeAnalysis;
 }
+
+// ADD TO BOTTOM OF gemini.ts
+ 
+import { renderTaxonomyForPrompt, getAllUnitsForTopic, getSubtopicForUnit } from '../lib/taxonomy';
+import { MockQuestion, TopicProfile } from './supabase';
+ 
+export interface QuestionUnitTag {
+  subtopic: string;
+  unit: string;
+}
+ 
+/**
+ * Tag a single question with its deep taxonomy units.
+ * Uses only the taxonomy slice for the question's topic — never the full tree.
+ * Called during extraction, once per question.
+ */
+export async function tagQuestionUnits(
+  question: GeneratedQuestion
+): Promise<QuestionUnitTag[]> {
+  const topicSlice = renderTaxonomyForPrompt(question.topic);
+  if (!topicSlice) return [];
+ 
+  const allUnits = getAllUnitsForTopic(question.topic);
+  if (allUnits.length === 0) return [];
+ 
+  const prompt = `
+You are classifying a Bocconi exam question against a fixed taxonomy.
+ 
+QUESTION:
+${question.question}
+ 
+OPTIONS: ${question.options.join(' | ')}
+EXPLANATION: ${question.explanation}
+ 
+${topicSlice}
+ 
+TASK:
+From the taxonomy above, identify which specific UNITS this question tests.
+A question may test 1-3 units. Select ONLY from the exact unit names listed.
+Do not invent units not in the list.
+ 
+Return JSON: { "units": ["exact unit name 1", "exact unit name 2"] }
+Rules:
+- Only include units that are genuinely and directly tested by this question
+- Maximum 3 units
+- Use exact names from the taxonomy — no paraphrasing
+`;
+ 
+  try {
+    const res = await fetch('/api/groq', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [{ role: 'user', content: prompt }],
+        response_format: { type: 'json_object' },
+        temperature: 0.0,
+      }),
+    });
+    if (!res.ok) throw new Error(`Groq API proxy ${res.status}`);
+    const data = await res.json();
+    const text: string = data.choices?.[0]?.message?.content ?? '{}';
+    const parsed = JSON.parse(text) as { units?: string[] };
+    const validUnits = (parsed.units ?? []).filter((u: string) => allUnits.includes(u));
+ 
+    return validUnits.map((unit: string) => ({
+      subtopic: getSubtopicForUnit(question.topic, unit) ?? question.subtopic,
+      unit,
+    }));
+  } catch (err) {
+    console.error('Unit tagging failed:', err);
+    return [];
+  }
+}
+
+
+/**
+ * Generate a 768-dimension embedding for a question.
+ * Uses Gemini text-embedding-004 (free, high quality).
+ * Called after tag review is complete for a question.
+ */
+export async function generateEmbedding(text: string): Promise<number[]> {
+  const res = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'embedContent',
+      model: 'text-embedding-004',
+      contents: text,
+    }),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const data = await res.json();
+  return (data.embedding ?? []) as number[];
+}
+
+export interface TopicProfileAnalysis {
+  topic: string;
+  coverage_map: Record<string, { count: number; confidence: 'high'|'medium'|'low' }>;
+  difficulty_ladder: string;
+  distractor_taxonomy: string;
+  time_pressure: string;
+  calibrated_uplift: string;
+  figure_patterns: string;
+  prose_injection: string;
+  representative_q_ids: { Easy: string[]; Medium: string[]; Hard: string[] };
+  question_count: number;
+}
+ 
+/**
+ * Analyse all questions for one topic and produce a draft TopicProfile.
+ * Uses Gemini 2.5 Pro. Called ONCE per topic per upload batch.
+ * Returns a structured draft for manual review — nothing is saved automatically.
+ */
+export async function analyseTopicProfile(
+  topic: string,
+  questions: Array<{
+    id: string;
+    question: GeneratedQuestion;
+    units: Array<{ subtopic: string; unit: string }>;
+  }>
+): Promise<TopicProfileAnalysis> {
+  if (questions.length === 0) {
+    throw new Error(`No questions provided for topic: ${topic}`);
+  }
+ 
+  // Serialise chart data as descriptive text so the model sees figure content
+  const questionContext = questions.map((item, i) => {
+    const q = item.question;
+    const units = item.units.map(u => u.unit).join(', ') || 'untagged';
+ 
+    let chartDesc = '';
+    if (q.chartData) {
+      const cd = q.chartData;
+      chartDesc = `[FIGURE: ${cd.type} chart titled '${cd.title}'.`;
+      if (cd.tableData) {
+        chartDesc += ` Columns: ${cd.tableData.headers.join(', ')}.`;
+        chartDesc += ` ${cd.tableData.rows.length} data rows.`;
+        if (cd.tableData.rows.length > 0) {
+          chartDesc += ` Sample row: ${cd.tableData.rows[0].join(', ')}.`;
+        }
+      }
+      if (cd.series && cd.series.length > 0) {
+        chartDesc += ` Series: ${cd.series.map(s => s.name).join(', ')}.`;
+        chartDesc += ` Data points per series: ${cd.series[0].data.length}.`;
+      }
+      chartDesc += ']';
+    }
+ 
+    return [
+      `--- Q${i+1} [${q.difficulty ?? 'Medium'}] [Units: ${units}] ---`,
+      `Question: ${q.question}`,
+      `Options: ${q.options.join(' | ')}`,
+      `Correct: ${q.correctAnswer}`,
+      `Explanation: ${q.explanation}`,
+      chartDesc ? chartDesc : '',
+      `StyleAnalysis: ${q.styleAnalysis ?? ''}`,
+    ].filter(Boolean).join('\n');
+  }).join('\n\n');
+ 
+  const topicSlice = renderTaxonomyForPrompt(topic);
+ 
+  // Build coverage map from actual unit tags
+  const unitCounts: Record<string, number> = {};
+  questions.forEach(item => {
+    item.units.forEach(u => {
+      unitCounts[u.unit] = (unitCounts[u.unit] ?? 0) + 1;
+    });
+  });
+  const coverageMap: Record<string, { count: number; confidence: 'high'|'medium'|'low' }> = {};
+  Object.entries(unitCounts).forEach(([unit, count]) => {
+    coverageMap[unit] = {
+      count,
+      confidence: count >= 3 ? 'high' : count === 2 ? 'medium' : 'low',
+    };
+  });
+ 
+  // Representative questions: best 2 per difficulty level
+  const byDiff: Record<string, string[]> = { Easy:[], Medium:[], Hard:[] };
+  questions.forEach(item => {
+    const d = item.question.difficulty ?? 'Medium';
+    if (byDiff[d] && byDiff[d].length < 2) byDiff[d].push(item.id);
+  });
+ 
+  const prompt = `
+You are an expert analyst of the Bocconi undergraduate entrance test.
+Your task: analyse the ${questions.length} ${topic} questions below and produce
+a MASTER PATTERN PROFILE for this topic only.
+ 
+${topicSlice}
+ 
+OBSERVED UNIT COVERAGE:
+${Object.entries(coverageMap).map(([u,v]) =>
+  `  ${u}: ${v.count} appearance(s) — confidence: ${v.confidence}`
+).join('\n')}
+ 
+IMPORTANT RULES:
+- Base every claim on the actual questions below. No invented patterns.
+- For low-coverage units (1 appearance), note uncertainty explicitly.
+- Statistical figures must be analysed: describe chart types, data structures,
+  and how questions reference them.
+- The calibrated_uplift field must describe SPECIFIC structural changes
+  that make the real Bocconi test 10-15% harder than mock tests for THIS topic.
+  Not vague adjectives — specific: 'add one extra algebraic step', etc.
+- prose_injection must be concise (max 400 words). It will be injected into
+  every generation prompt for this topic.
+ 
+QUESTIONS:
+${questionContext}
+ 
+Output JSON with these exact fields:
+{
+  "difficulty_ladder": "What concretely distinguishes Easy/Medium/Hard for this topic.",
+  "distractor_taxonomy": "Categories of wrong answers used and how they trap students.",
+  "time_pressure": "What makes questions in this topic slow. Specific elements.",
+  "calibrated_uplift": "Specific structural changes for 10-15% real test uplift.",
+  "figure_patterns": "Chart/table types used, data structures, how questions reference them. Empty string if no figures.",
+  "prose_injection": "Dense instructional markdown for injection into generation prompts. Max 400 words. Start with ## ${topic} PATTERNS. No preamble."
+}
+`;
+ 
+  const res = await fetch('/api/gemini', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      action: 'generateContent',
+      model: 'gemini-2.5-pro',
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      config: {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            difficulty_ladder:   { type: Type.STRING },
+            distractor_taxonomy: { type: Type.STRING },
+            time_pressure:       { type: Type.STRING },
+            calibrated_uplift:   { type: Type.STRING },
+            figure_patterns:     { type: Type.STRING },
+            prose_injection:     { type: Type.STRING },
+          },
+          required: ['difficulty_ladder','distractor_taxonomy','time_pressure',
+                     'calibrated_uplift','figure_patterns','prose_injection'],
+        },
+        temperature: 0.1,
+        maxOutputTokens: 4096,
+      },
+    }),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const response = await res.json();
+  const text = response.text;
+  if (!text) throw new Error('Empty response from profile analysis');
+  const parsed = JSON.parse(text);
+ 
+  return {
+    topic,
+    coverage_map: coverageMap,
+    difficulty_ladder:   parsed.difficulty_ladder,
+    distractor_taxonomy: parsed.distractor_taxonomy,
+    time_pressure:       parsed.time_pressure,
+    calibrated_uplift:   parsed.calibrated_uplift,
+    figure_patterns:     parsed.figure_patterns,
+    prose_injection:     parsed.prose_injection,
+    representative_q_ids: {
+      Easy:   byDiff.Easy,
+      Medium: byDiff.Medium,
+      Hard:   byDiff.Hard,
+    },
+    question_count: questions.length,
+  };
+}
+
+// UPDATE generateQuestions signature — add two new optional parameters:
+// approvedProfile?: TopicProfile | null
+// similarExamples?: MockQuestion[]
+// isExtrapolated?: boolean
+ 
+// The prompt building in generateQuestions — replace the learnedProfilePrompt
+// section with this more precise version:
+ 
+// NEW: build topic-specific profile injection
+function buildTopicProfilePrompt(
+  profile: TopicProfile | null,
+  similarExamples: MockQuestion[]
+): string {
+  if (!profile && similarExamples.length === 0) return '';
+  const lines: string[] = [];
+  lines.push('══════════════════════════════════════════════════════');
+  lines.push('APPROVED TOPIC PROFILE (from real Bocconi mock analysis):');
+ 
+  if (profile?.prose_injection) {
+    lines.push(profile.prose_injection);
+  }
+  if (profile?.calibrated_uplift) {
+    lines.push('');
+    lines.push('CALIBRATED UPLIFT FOR THIS TOPIC (apply to all generated questions):');
+    lines.push(profile.calibrated_uplift);
+  }
+  if (similarExamples.length > 0) {
+    lines.push('');
+    lines.push('REAL BOCCONI EXAMPLES AT THIS DIFFICULTY (replicate this style exactly):');
+    similarExamples.forEach((ex, i) => {
+      lines.push(`[Example ${i+1}]`);
+      lines.push(`Q: ${ex.question}`);
+      lines.push(`Options: ${(ex.options as string[]).join(' | ')}`);
+      lines.push(`Correct: ${ex.correct_answer}`);
+      if (ex.style_analysis) lines.push(`Style: ${ex.style_analysis}`);
+      lines.push('');
+    });
+  }
+  lines.push('══════════════════════════════════════════════════════');
+  return lines.join('\n');
+}
+ 
+// In the generateQuestions function signature, add these parameters:
+// (already updated above)
+ 
+// For each request, build a topic-specific profile prompt:
+// (add this inside the existing prompt building, replacing learnedProfilePrompt
+// for requests that have an approved profile)
+// requests.forEach(r => {
+//   const profile = approvedProfiles?.[r.topic] ?? null;
+//   const examples = similarExamplesMap?.[r.topic] ?? [];
+//   const topicPrompt = buildTopicProfilePrompt(profile, examples);
+//   // inject topicPrompt into the per-request prompt section
+//   // (see full updated generateQuestions in the calling code)
+// });
 
 // ── Chatbot (gemini-2.0-flash — fast conversational) ─────────────────────────
 

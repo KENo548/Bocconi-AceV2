@@ -1,0 +1,132 @@
+{
+  "topic": "Discrete Mathematics",
+  "approved": false,
+  "question_count": 3,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Combinatorics / Constrained Partitions",
+        "count": 3,
+        "confidence": "HIGH",
+        "refs": [
+          "M3Q47",
+          "M4Q26",
+          "M4Q39"
+        ]
+      }
+    ],
+    "coverage_assessment": "This module is intensely focused on combinatorics, specifically partitioning groups with constraints (minimums, distinct digits). There is a distinct absence of pure probability, basic unconstrained permutations, and binomial expansions. Every question requires a preliminary logical deduction before a formula can be applied."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "1 to 2 steps (direct factorial or basic nCr)",
+      "concept_mixing": "None.",
+      "qualifier_sensitivity": "Low.",
+      "answer_similarity": "Low."
+    },
+    "medium": {
+      "refs": [
+        "M3Q47",
+        "M4Q26",
+        "M4Q39"
+      ],
+      "steps_required": "3 to 4 steps (pre-allocate, apply formula, adjust for indistinguishability)",
+      "concept_mixing": "Indistinguishable vs distinguishable items combined with partitions",
+      "qualifier_sensitivity": "High ('at least 2', 'identical', 'all different')",
+      "answer_similarity": "High; options match raw formula outputs without preliminary adjustments"
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "5+ steps",
+      "concept_mixing": "Multi-stage probability with complex combinatorial states",
+      "qualifier_sensitivity": "Very high",
+      "answer_similarity": "Highly engineered"
+    }
+  },
+  "trap_and_error_architecture": {
+    "distractor_engine": {
+      "input_structure": "N items, K bins/slots, Constraint C (minimums, indistinguishability, zero-exclusion)",
+      "correct_transformation": "Pre-process Constraint C → Apply Raw Formula → Adjust for Symmetry",
+      "finite_distractor_set": [
+        "Raw Formula Output — Applying stars-and-bars without pre-allocation, maps to M4Q39: 28",
+        "Missing Division by Symmetry — Treating unlabeled equal-sized subgroups as distinct, maps to M3Q47: 15",
+        "Wrong Starting Domain — 10×9×8×7 instead of restricting leading digit to 9×9×8×7, maps to M4Q26: 5040",
+        "Incorrect pre-allocation amount — pre-allocating wrong number of items before applying formula"
+      ]
+    },
+    "traps": [
+      {
+        "name": "Minimum Constraint Omission",
+        "mechanism": "Student applies stars-and-bars (or subset formula) directly without first pre-allocating the minimum required items, yielding the unconstrained result.",
+        "refs": [
+          "M4Q39"
+        ],
+        "name_normalized": "MINIMUM_CONSTRAINT_OMISSION"
+      },
+      {
+        "name": "Symmetry Division Omission",
+        "mechanism": "When dividing into two equal-sized unlabeled subgroups, student treats the groups as distinguishable (Group A vs Group B) and fails to divide by 2.",
+        "refs": [
+          "M3Q47"
+        ],
+        "name_normalized": "SYMMETRY_DIVISION_OMISSION"
+      },
+      {
+        "name": "Leading Zero Inclusion",
+        "mechanism": "Student includes 0 as a valid first digit in a number formation problem, inflating the count by treating the first slot as having 10 options instead of 9.",
+        "refs": [
+          "M4Q26"
+        ],
+        "name_normalized": "LEADING_ZERO_INCLUSION"
+      }
+    ],
+    "elimination_mapping": {
+      "M3Q47": {
+        "A": "Over-counted: included splits of (1,5) and (0,6) violating 'at least 2' → 31",
+        "B": "Over-counted with incorrect symmetry adjustment",
+        "C": "C(6,2) = 15 only — counted (2,4) split but forgot (3,3) split entirely, or forgot symmetry on (3,3)",
+        "E": "Used permutation instead of combination for one split"
+      },
+      "M4Q26": {
+        "A": "Severely under-counted — arithmetic error",
+        "B": "Arithmetic error in slot multiplication",
+        "C": "Used P(9,4) = 9×8×7×6 = 3024 — wrong formula entirely",
+        "D": "Leading zero inclusion: 10×9×8×7 = 5040"
+      },
+      "M4Q39": {
+        "A": "Stars and bars without constraint: C(6+3-1,3-1) = C(8,2) = 28 — raw unconstrained formula",
+        "B": "Meta-trap — 'None of the other answers' selected when student computed a non-listed value",
+        "C": "Raw stars and bars C(6+3-1,3-1) = C(8,2) = 28 — no pre-allocation",
+        "E": "Pre-allocated incorrectly or used wrong formula variant"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "description": "Combinatorics induces severe framework panic. Students must rapidly categorize the ruleset (Identical? Distinct? Order matters?). Time pressure prevents them from listing a small test case to verify their formula choice, forcing guessing. The preliminary step (pre-assigning items to satisfy minimum constraints) is the first casualty of time pressure."
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure.",
+    "layer_1_problem_structure_mutation": "Adding a baseline threshold ('at least 1 ball') to standard distribution problems.",
+    "layer_2_cognitive_load_injection": "Asymmetric constraints such as the first digit of a number not being zero, forcing customized slot-filling rules.",
+    "layer_3_answer_engineering": "MOST WEIGHT. Distractors perfectly match the unadjusted, raw formula outputs. A raw combinatorial formula applied without the preliminary constraint step must always appear as a wrong option."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 0,
+    "note": "No figures. The prose carries 100% of the mathematical framework. Modifiers like 'identical balls' versus 'distinct people' radically alter the formula. Missing a single adjective changes the entire solution approach."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "at least 2",
+      "at least 1",
+      "identical",
+      "all different",
+      "1,000-9,999"
+    ],
+    "primary_ambiguity_mechanism": "'Divide 6 people into two subgroups' (M3Q47) is ambiguous regarding whether the subgroups are labeled (Group A/B) or unlabeled. The correct math treats equal-sized groups as unlabeled (divide by 2), representing a major conceptual fork over standard combination translation.",
+    "near_correct_construction": "Second-closest options are the raw formula output without the preliminary constraint processing — numerically larger than the correct answer and seemingly plausible."
+  },
+  "generation_fingerprint": "## DISCRETE MATHEMATICS GENERATION FINGERPRINT\n\nBocconi Discrete Mathematics focuses strictly on constrained combinations and slot-filling principles. Dominant question types are identical-item distributions with minimum requirements, and digit-formation combinatorics. The distractor engine operates on the strict rule that a raw formula is always a wrong answer — every raw combinatorial formula applied without accounting for the text's specific constraints yields a number exactly present in the options.\n\nPrimary trap mechanics involve Minimum Constraint Omission (forgetting to pre-allocate items) and missing symmetry division. Difficulty calibration dictates that pure formula memorization is punished; problems mandate a preliminary logical deduction (zero-exclusion, pre-allocation) before the core formula becomes valid.\n\nThe primary difficulty driver is not Discrete Mathematics complexity but the precision required to distinguish answer choices engineered from specific reasoning errors."
+}

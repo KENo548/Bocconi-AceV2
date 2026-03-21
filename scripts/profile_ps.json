@@ -1,0 +1,285 @@
+{
+  "topic": "Problem Solving",
+  "approved": false,
+  "question_count": 13,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Word Problems & Linear Equations",
+        "count": 3,
+        "confidence": "HIGH",
+        "refs": [
+          "M1Q40",
+          "M2Q9",
+          "M3Q2"
+        ]
+      },
+      {
+        "name": "Logical Deductions & Boundary Conditions",
+        "count": 3,
+        "confidence": "HIGH",
+        "refs": [
+          "M2Q18",
+          "M3Q16",
+          "M3Q31"
+        ]
+      },
+      {
+        "name": "Unit Conversion & Scaling",
+        "count": 3,
+        "confidence": "HIGH",
+        "refs": [
+          "M2Q41",
+          "M3Q36",
+          "M4Q46"
+        ]
+      },
+      {
+        "name": "Work and Rates",
+        "count": 2,
+        "confidence": "MED",
+        "refs": [
+          "M2Q30",
+          "M3Q13"
+        ]
+      },
+      {
+        "name": "Kinematics (Average Speed)",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M4Q18"
+        ]
+      },
+      {
+        "name": "Fractions, Proportions & Base-Shifting",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M4Q38"
+        ]
+      }
+    ],
+    "coverage_assessment": "The dataset is highly concentrated on linear arithmetic logic, dimensional analysis, and text-based boundary reasoning. It completely lacks pure geometry, probability, combinatorics, and non-linear algebra. The profile can reliably encode how Bocconi structures rate problems and logical boundary puzzles out of text, but cannot reliably encode spatial reasoning, graphical data interpretation, or advanced algebra as these do not appear in the data."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [
+        "M1Q40",
+        "M2Q41",
+        "M4Q46"
+      ],
+      "steps_required": "1 to 2 direct arithmetic translations or simple substitutions",
+      "concept_mixing": "None; single-domain calculations",
+      "qualifier_sensitivity": "Low; phrasing is direct and qualifiers such as 'approximately' do not aggressively alter the core mathematical setup",
+      "answer_similarity": "Low; wrong options are magnitudes apart (factors of 10) or distinct units"
+    },
+    "medium": {
+      "refs": [
+        "M2Q9",
+        "M2Q18",
+        "M2Q30",
+        "M3Q2",
+        "M3Q13",
+        "M3Q16",
+        "M3Q31",
+        "M3Q36",
+        "M4Q18",
+        "M4Q38"
+      ],
+      "steps_required": "2 to 3 steps involving intermediary variables, solving simple systems of equations, or calculating boundary ranges",
+      "concept_mixing": "High; embedding rate math with irrelevant absolute totals (M2Q30, M3Q13) or mixing strict inequalities with absolute ratios",
+      "qualifier_sensitivity": "High; hinges heavily on 'exactly,' 'at least,' or 'necessarily true/false' (M2Q18, M3Q16, M3Q31)",
+      "answer_similarity": "High; wrong options engineered to match common arithmetic traps, partial calculations, or reversibility fallacies"
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "3 to 4 steps focused on constraint conflict and exhaustive verification rather than deep algebraic abstraction",
+      "concept_mixing": "High degree of ambiguity combined with multi-rule verification, forcing candidates to reconcile overlapping logical and numerical constraints",
+      "qualifier_sensitivity": "Extreme; nested qualifiers requiring edge-case testing for minimums and maximums simultaneously",
+      "answer_similarity": "Punishing; options include values that are merely possible rather than necessarily true, explicitly punishing failure to verify necessity across all boundary states"
+    }
+  },
+  "trap_and_error_architecture": {
+    "traps": [
+      {
+        "name": "Redundant Information Trap",
+        "mechanism": "A large absolute total is provided that cancels out entirely during the correct calculation, wasting time and inviting unnecessary arithmetic",
+        "refs": [
+          "M2Q30",
+          "M3Q13"
+        ],
+        "exact_values": "240 names",
+        "name_normalized": "REDUNDANT_INFORMATION_TRAP"
+      },
+      {
+        "name": "False Familiarity Speed Trap",
+        "mechanism": "Near-identical problem structures are reused across mocks to encourage rushing, causing students to assume identical mechanics without checking updated parameters",
+        "refs": [
+          "M2Q30",
+          "M3Q13"
+        ],
+        "name_normalized": "FALSE_FAMILIARITY_SPEED_TRAP"
+      },
+      {
+        "name": "Qualifier Blindness Trap",
+        "mechanism": "Treating 'at least X' or 'maximum X' as 'exactly X' when evaluating statements",
+        "refs": [
+          "M3Q16",
+          "M3Q31"
+        ],
+        "name_normalized": "QUALIFIER_BLINDNESS_TRAP"
+      },
+      {
+        "name": "Base-Shift / Reference Frame Trap",
+        "mechanism": "Changing the denominator for a proportional decrease after an increase; student applies the original fraction to the new base",
+        "refs": [
+          "M4Q38"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "BASE_SHIFT_REFERENCE_FRAME_TRAP"
+      },
+      {
+        "name": "Missing Square Conversion Trap",
+        "mechanism": "Applying a linear scale factor to an area unit instead of squaring the conversion factor",
+        "refs": [
+          "M3Q36"
+        ],
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "name_normalized": "MISSING_SQUARE_CONVERSION_TRAP"
+      }
+    ],
+    "elimination_mapping": {
+      "M1Q40": {
+        "A": "Giving up / no match found",
+        "B": "Confusing constant 12 with variable h",
+        "C": "Misinterpreting linear coefficient as exponential growth factor",
+        "E": "Confusing rate with variable n"
+      },
+      "M2Q9": {
+        "A": "Guessing 1/3 of total mass",
+        "C": "Subtraction error (1.5 - 1.1)",
+        "D": "Subtraction error (1.5 - 1.4)",
+        "E": "Calculation error when isolating variable"
+      },
+      "M2Q18": {
+        "A": "Miscalculating inequality minimum for men with degree",
+        "B": "Assuming maximum uniform distribution across categories",
+        "C": "Violating the maximum men constraint",
+        "E": "Assuming exact baseline population rather than boundary"
+      },
+      "M2Q30": {
+        "A": "Base-60 time conversion error producing 100 minutes",
+        "B": "Adding individual times (3 + 2 = 5 hours)",
+        "C": "Fraction manipulation error in rate addition",
+        "D": "Averaging the two individual times"
+      },
+      "M2Q41": {
+        "A": "Magnitude shift (result x10)",
+        "B": "Random division of given numbers without chain conversion",
+        "D": "Decimal shift error in final step",
+        "E": "Magnitude shift (result divided by 10)"
+      },
+      "M3Q2": {
+        "A": "Ignored whole-number divisibility constraint",
+        "B": "Squared variable instead of cubing (used 12x^2 instead of 12x^3)",
+        "C": "Ignored whole-number divisibility constraint",
+        "D": "Formed 4x^3 instead of 12x^3 (dropped ratio multiplier)"
+      },
+      "M3Q13": {
+        "A": "Base-60 time conversion error",
+        "B": "Averaging the two individual times",
+        "C": "Arithmetic fraction error in rate addition",
+        "D": "Adding individual times (4 + 2 = 6 hours)"
+      },
+      "M3Q16": {
+        "A": "Reversing chair/desk ratio and accepting false statement A",
+        "C": "Treating 'at least' as 'exactly' for open space chairs",
+        "D": "Confusing open space desk count with private office count",
+        "E": "Option combination error — selected wrong pair"
+      },
+      "M3Q31": {
+        "B": "Missed D's direct contradiction of stated data (20 families given)",
+        "C": "Misread prompt as 'necessarily true' instead of 'necessarily false'",
+        "D": "Misread prompt as 'necessarily true' instead of 'necessarily false'",
+        "E": "Missed C's uniform distribution fallacy"
+      },
+      "M3Q36": {
+        "A": "Giving up / calculated value not listed",
+        "B": "Applied linear conversion factor squared (100^2) instead of area factor (1000^2)",
+        "C": "Identity mapping / misread metric prefix",
+        "E": "Decimal division off by factor of 10"
+      },
+      "M4Q18": {
+        "A": "Additive subtraction of speeds instead of time equation",
+        "B": "Used LCM directly as distance without solving",
+        "C": "Arithmetic mean of speeds (25 km/hr) instead of harmonic setup",
+        "D": "Proportional subtraction error"
+      },
+      "M4Q38": {
+        "A": "Reversibility fallacy — kept 1/14 as the decrease fraction",
+        "C": "Assumed calculation requires knowing absolute volume V",
+        "D": "Squared the fraction (1/14)^2 = 1/196",
+        "E": "Shifted base in wrong direction, producing 1/13"
+      },
+      "M4Q46": {
+        "A": "Decimal shifted right (1000g read as 10kg)",
+        "B": "Missed area calculation entirely, used 1m only",
+        "D": "Divided total by 2 without justification",
+        "E": "Decimal shifted left (1000g read as 100g)"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "mechanisms": [
+      {
+        "name": "Redundancy Filtering",
+        "description": "The brain must pause to decide if numbers like '240 names' (M2Q30) or '20 employees' (M3Q16) are mathematically required or deliberate decoys"
+      },
+      {
+        "name": "Constraint Verification",
+        "description": "In boundary deduction questions (M2Q18, M3Q16, M3Q31), candidates cannot simply solve for x — they must test edge cases to verify a statement holds under all minimum and maximum conditions"
+      },
+      {
+        "name": "False Familiarity",
+        "description": "Structural recycling causes rushing. When candidates recognise a familiar setup they skim past critical qualifiers, triggering pre-planned trap answers"
+      },
+      {
+        "name": "Back-and-Forth Cost",
+        "description": "Data + Statements formatting requires holding 4 to 5 numerical constraints in working memory simultaneously, forcing repeated re-reading to evaluate multiple statements against the same data"
+      }
+    ]
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure. NOT harder problems in the JEE or olympiad sense.",
+    "layer_1_problem_structure_mutation": "Shift the reference frame mid-problem (M4Q38 pattern) forcing relative expression building, or inject redundant absolute totals (M2Q30 pattern) that cancel out but invite unnecessary arithmetic",
+    "layer_2_cognitive_load_injection": "Replace exact equalities with boundary constraints ('at least', 'more than', 'maximum'). This forces the student out of pure algebra and into edge-case verification across all valid states",
+    "layer_3_answer_engineering": "MOST WEIGHT. Construct wrong options as the exact outputs of heuristic errors. Include options that are valid under some conditions but not all, to trap failure to verify necessity. If the setup demands harmonic mean, provide the arithmetic mean. If area conversion is required, provide the linear scale equivalent."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 0,
+    "note": "0 of 13 PS questions contain figures. This section addresses prose structure instead.",
+    "prose_risk_patterns": [
+      "Critical numerical information and core constraints frequently sit in middle clauses of sentences or within easily skipped qualifying adjectives (e.g., 'whole numbers' in M3Q2, 'necessarily false' in M3Q31)",
+      "Numerical relations are written as prose rather than symbols ('more people have a degree than people who don't'), forcing slower translation from text to algebra",
+      "Redundant data (240 names) is positioned to appear load-bearing, requiring active decision to discard it"
+    ]
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "exactly",
+      "at least",
+      "maximum",
+      "necessarily true",
+      "necessarily false",
+      "approximately",
+      "whole numbers"
+    ],
+    "primary_ambiguity_mechanism": "Confusion between necessary, possible, and exact values. The test exploits the gap between a numerical state being mathematically possible under the given constraints versus being mathematically guaranteed across all valid states.",
+    "near_correct_construction": "Second-closest options are built by violating a single boundary qualifier. If a value is mathematically 'at least 20,' the near-correct trap presents it as 'exactly 20' (M3Q16 pattern)."
+  },
+  "generation_fingerprint": "## PROBLEM SOLVING GENERATION FINGERPRINT\n\nBocconi Problem Solving emphasizes cognitive precision and trap evasion under time pressure, strictly avoiding JEE-style algebraic depth. The dataset is demonstrably undercalibrated (dominated by Easy and Medium questions, with 0 true Hard examples). Therefore, difficulty must be extrapolated through structural mutation and constraint verification, not higher-level math. The primary difficulty driver is not the problem structure, but the precision required to distinguish between answer choices engineered from specific reasoning errors.\n\nGeneration must follow the Evil Answer Choices Principle: every distractor must map to a specific, predictable student error. Wrong answers are typically arithmetic means masquerading as harmonic means, linear conversions standing in for area conversions, or base-60 time formatting errors. Crucially, traps frequently exploit the False Familiarity Speed Trap (e.g., recycling the exact M2Q30 structure in M3Q13), weaponizing a student's tendency to rush familiar setups without verifying parameters.\n\nThree high-priority mechanical patterns define the Bocconi style:\n\nThe Base-Shift / Reference-Frame Trap: Although rare in the dataset (M4Q38), base-shift traps are disproportionately high-leverage and must be explicitly modeled. They force candidates to recognize that changing the denominator alters the proportional relationship when a state reverses (e.g., increasing by 1/14 means decreasing from the new base by 1/15).\n\nThe Logical Deduction Boundary Subtype: Questions like M2Q18, M3Q16, and M3Q31 blur the line with Critical Thinking. They belong in PS because they require quantitative boundary-setting (integer constraints, greater/less than thresholds, min/max arithmetic). These must focus on the core ambiguity axis: distinguishing between what is possible and what is necessarily true/false.\n\nThe Redundant Information Trap: Demonstrated in M2Q30/M3Q13, large absolute totals (e.g., '240 names') are injected into rate problems specifically to generate cognitive load and waste time, as they cancel out entirely in the correct mathematical setup.\n\nTo generate authentic Bocconi PS questions, embed data deep within prose, utilize dense qualifying language ('at least', 'maximum'), and construct distractors that punish lazy reading and reflexive arithmetic without requiring advanced formulas.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

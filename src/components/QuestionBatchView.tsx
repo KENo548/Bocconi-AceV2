@@ -1,9 +1,14 @@
+import { createClient } from '@supabase/supabase-js';
+const supabaseClient = createClient(
+    import.meta.env.VITE_SUPABASE_URL,
+    import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 import React, { useState, useRef, useEffect } from 'react';
 import { QuestionBatch, QuestionConfig, QuestionResult, useStore } from '../store/useStore';
-import { generateQuestions, GeneratedQuestion } from '../services/gemini';
+import { generateQuestions, GeneratedQuestion } from '../services/groq';
 import { SYLLABUS, ALL_TOPICS, MathText, formatTime } from '../lib/constants';
-import { Button } from './ui/Button';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from './ui/Card';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Loader2, Plus, Trash2, ChevronDown, ChevronUp, CheckCircle2, XCircle, Play, Pause, RotateCcw, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import QuestionFigure from './QuestionFigure';
@@ -16,7 +21,7 @@ interface Props {
 }
 
 export default function QuestionBatchView({ batch, batchIndex, onBatchUpdate, onDeleteBatch }: Props) {
-    const { mockQuestions, addMockQuestions, openChat, learnedStyleProfile } = useStore();
+    const { mockQuestions, openChat } = useStore();
     const [collapsed, setCollapsed] = useState(false);
     const [loading, setLoading] = useState(false);
 
@@ -25,12 +30,17 @@ export default function QuestionBatchView({ batch, batchIndex, onBatchUpdate, on
     const [showConfigForm, setShowConfigForm] = useState(batch.questions.length === 0);
     const [configs, setConfigs] = useState<QuestionConfig[]>(batch.configs);
 
-    // Use refs for timer to avoid stale closures
     const timerRef = useRef<NodeJS.Timeout | null>(null);
     const batchRef = useRef(batch);
     batchRef.current = batch;
-
-
+    const validQsRef = useRef<GeneratedQuestion[]>([]);
+    const questionStartTimes = useRef<Record<number, number>>({});
+    const questionPauseStart = useRef<Record<number, number>>({});
+    const questionPauseOffset = useRef<Record<number, number>>({});
+    
+    useEffect(() => { 
+        validQsRef.current = batch.questions; 
+    }, [batch.questions]);
 
 
     useEffect(() => {
@@ -63,40 +73,64 @@ export default function QuestionBatchView({ batch, batchIndex, onBatchUpdate, on
     const handleGenerate = async () => {
         setLoading(true);
         try {
-            // Handle source filtering (Mock vs AI) just like PaperBuilder
-            const finalQuestions = configs.map(config => {
-                if (config.source === 'Mock') {
-                    const matching = mockQuestions.filter(mq => mq.topic === config.topic);
-                    if (matching.length > 0) {
-                        return matching[Math.floor(Math.random() * matching.length)];
+            const finalQuestions: (GeneratedQuestion | null)[] = new Array(configs.length).fill(null);
+
+            // Fetch real mock questions from Supabase for configs with source='Mock'
+            for (let i = 0; i < configs.length; i++) {
+                const config = configs[i];
+                if (config.source !== 'Mock') continue;
+
+                const { data, error } = await supabaseClient
+                    .from('mock_questions')
+                    .select('topic, subtopic, question, options, correct_answer, explanation, difficulty, source, has_figure, figure_description, chart_data')
+                    .eq('topic', config.topic)
+                    .limit(50);
+
+                if (!error && data && data.length > 0) {
+                    // Avoid repeating questions already in this batch
+                    const usedStems = new Set(batch.questions.map(q => q.question.substring(0, 60)));
+                    const unused = data.filter(q => !usedStems.has(q.question.substring(0, 60)));
+                    const pool = unused.length > 0 ? unused : data;
+                    const picked = pool[Math.floor(Math.random() * pool.length)];
+
+                    // VALIDATION: Ensure correct_answer exists in options
+                    let validAnswer = picked.correct_answer as 'A' | 'B' | 'C' | 'D' | 'E';
+                    if (picked.options && picked.options.length > 0) {
+                        const answerIndex = picked.options.findIndex(o => 
+                            o.charAt(0).toUpperCase() === validAnswer.toUpperCase()
+                        );
+                        if (answerIndex === -1) {
+                            console.warn(`[VALIDATION] Answer "${validAnswer}" not in options for: ${picked.question.substring(0, 50)}`);
+                            validAnswer = picked.options[0]?.charAt(0).toUpperCase() as 'A' | 'B' | 'C' | 'D' | 'E' || 'A';
+                        }
                     }
+
+                    finalQuestions[i] = {
+                        topic: picked.topic,
+                        subtopic: picked.subtopic,
+                        question: picked.question,
+                        options: picked.options,
+                        correctAnswer: validAnswer,
+                        explanation: picked.explanation,
+                        difficulty: picked.difficulty,
+                        source: `Mock Test (${picked.source || 'Real'})`,
+                        chartData: picked.chart_data || null,
+                    };
+                } else {
+                    console.warn(`No mock questions found for topic: ${config.topic}. Falling back to AI.`);
                 }
-                return null;
-            });
 
-            const mockFallbacks = configs.filter((cfg, i) =>
-                cfg.source === 'Mock' && finalQuestions[i] === null
-            );
-
-            if (mockFallbacks.length > 0) {
-                const topicList = mockFallbacks.map(c => c.topic).join(', ');
-                alert(`No mock questions found for: ${topicList}. Falling back to AI generation.`);
             }
 
+            // AI generate for anything not filled by mock fetch
             const aiConfigs = configs.filter((_, i) => finalQuestions[i] === null);
-            let aiQs: typeof batch.questions = [];
+            let aiQs: GeneratedQuestion[] = [];
 
             if (aiConfigs.length > 0) {
-                // Synthesize context from the real mock test bank to teach the model how to build these
-                const topicsToGenerate = new Set(aiConfigs.map(c => c.topic));
-                const contextMocks = mockQuestions
-                    .filter(mq => topicsToGenerate.has(mq.topic))
-                    .sort(() => 0.5 - Math.random())
-                    .slice(0, 5); // Supply up to 5 examples as few-shot style guides
-
-                aiQs = await generateQuestions(aiConfigs, contextMocks, learnedStyleProfile);
+                aiQs = await generateQuestions(aiConfigs);
             }
 
+            // Merge
             let aiIndex = 0;
             const validQs: GeneratedQuestion[] = [];
             const validConfigs: QuestionConfig[] = [];
@@ -109,12 +143,9 @@ export default function QuestionBatchView({ batch, batchIndex, onBatchUpdate, on
                 }
             });
 
-            if (validQs.length === 0) {
-                alert("Generation failed — no questions were returned. Please try again.");
-                return;
-            }
-            const initialTimers: Record<number, { isRunning: boolean; elapsed: number; startTotalTime: number }> = {};
-            validQs.forEach((_, i) => { initialTimers[i] = { isRunning: false, elapsed: 0, startTotalTime: batch.totalTime }; });
+            const startTimes: Record<number, number> = {};
+            validQs.forEach((_, i) => { startTimes[i] = Date.now(); });
+            questionStartTimes.current = startTimes;
 
             onBatchUpdate({
                 ...batch,
@@ -123,21 +154,16 @@ export default function QuestionBatchView({ batch, batchIndex, onBatchUpdate, on
                 results: {},
                 selectedOptions: {},
                 isTimerRunning: true,
-                qTimers: initialTimers
             });
             setShowConfigForm(false);
         } catch (error) {
-            const errStr = String(error);
-            const isQuota = errStr.includes('429') || errStr.includes('quota') || errStr.includes('RESOURCE_EXHAUSTED') || errStr.includes('All models quota');
-            console.error("Failed to generate questions", error);
-            alert(isQuota
-                ? "API quota exceeded — all models are rate-limited. Please wait 30–60 seconds and try again."
-                : "Failed to generate questions. Please try again."
-            );
+            console.error('Failed to generate questions', error);
+            alert('Failed to generate questions. Please try again.');
         } finally {
             setLoading(false);
         }
     };
+
 
     const handleSubmit = async (index: number) => {
         // Prevent submitting again if already submitted
@@ -148,8 +174,16 @@ export default function QuestionBatchView({ batch, batchIndex, onBatchUpdate, on
         const isCorrect = userLetter === question.correctAnswer;
 
         // Calculate final timeTaken for this question from its individual timer
-        const qTimer = (batch.qTimers && batch.qTimers[index]) || { isRunning: false, elapsed: 0, startTotalTime: batch.totalTime };
-        const timeTaken = Math.max(0, qTimer.elapsed + (qTimer.isRunning ? batch.totalTime - qTimer.startTotalTime : 0));
+        // TRY ref-based timer first (new), fallback to state-based timer (legacy)
+        let timeTaken = 0;
+        if (questionStartTimes.current[index]) {
+            const elapsed = Date.now() - questionStartTimes.current[index];
+            const pauseOffset = questionPauseOffset.current[index] || 0;
+            timeTaken = Math.round((elapsed - pauseOffset) / 1000);
+        } else {
+            const qTimer = (batch.qTimers && batch.qTimers[index]) || { isRunning: false, elapsed: 0, startTotalTime: batch.totalTime };
+            timeTaken = Math.max(0, qTimer.elapsed + (qTimer.isRunning ? batch.totalTime - qTimer.startTotalTime : 0));
+        }
 
         const result: QuestionResult = {
             id: crypto.randomUUID(),
@@ -198,9 +232,20 @@ export default function QuestionBatchView({ batch, batchIndex, onBatchUpdate, on
         const timer = batch.qTimers?.[index] || { isRunning: false, elapsed: 0, startTotalTime: batch.totalTime };
         const newRunning = !timer.isRunning;
         let newElapsed = timer.elapsed;
+        
         if (!newRunning) {
+            // Pausing: record the pause start time and add to offset
             newElapsed += batch.totalTime - timer.startTotalTime;
+            questionPauseStart.current[index] = Date.now();
+        } else {
+            // Resuming: add accumulated pause time to offset and clear pause start
+            if (questionPauseStart.current[index]) {
+                const pausedDuration = Date.now() - questionPauseStart.current[index];
+                questionPauseOffset.current[index] = (questionPauseOffset.current[index] || 0) + pausedDuration;
+                delete questionPauseStart.current[index];
+            }
         }
+        
         onBatchUpdate({
             ...batch,
             qTimers: {
@@ -489,6 +534,17 @@ export default function QuestionBatchView({ batch, batchIndex, onBatchUpdate, on
                                                         </div>
                                                     </div>
                                                 </div>
+                                                {(question as any).isExtrapolated && (
+                                                    <div className='mx-6 mt-3 px-3 py-2 bg-amber-50 border border-amber-200 rounded-sm
+    text-xs text-amber-700 flex items-start gap-2'>
+                                                        <span className='shrink-0'>⚠️</span>
+                                                        <span>
+                                                            This subtopic has limited coverage in your mock data (1-2 examples).
+                                                            The question replicates general Bocconi style but exact pattern adherence
+                                                            may be lower than well-covered subtopics.
+                                                        </span>
+                                                    </div>
+                                                )}
                                             </CardHeader>
 
                                             <CardContent className="pt-6">

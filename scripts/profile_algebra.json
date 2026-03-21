@@ -1,0 +1,271 @@
+{
+  "topic": "Algebra",
+  "approved": false,
+  "question_count": 19,
+  "calibration_note": "Dataset shows 14 Easy, 5 Medium, 0 Hard. This is an undercalibration by the extraction model. For generation, treat most Easy-tagged questions as Medium. Hard Algebra questions are defined by the blueprint in Component 2C.",
+  "coverage_map": {
+    "Linear Equations": {
+      "count": 3,
+      "confidence": "HIGH",
+      "examples": [
+        "M4Q23",
+        "M2Q28",
+        "M3Q24"
+      ]
+    },
+    "Linear Inequalities": {
+      "count": 3,
+      "confidence": "HIGH",
+      "examples": [
+        "M3Q17",
+        "M2Q3",
+        "M3Q33"
+      ]
+    },
+    "Systems of Equations and Inequalities": {
+      "count": 4,
+      "confidence": "HIGH",
+      "examples": [
+        "M1Q3",
+        "M2Q46",
+        "M4Q1",
+        "M4Q10"
+      ]
+    },
+    "Quadratic Equations and Discriminant Analysis": {
+      "count": 3,
+      "confidence": "HIGH",
+      "examples": [
+        "M1Q27",
+        "M2Q27",
+        "M3Q38"
+      ]
+    },
+    "Absolute Value Equations and Inequalities": {
+      "count": 3,
+      "confidence": "HIGH",
+      "examples": [
+        "M2Q42",
+        "M3Q33",
+        "M4Q22"
+      ]
+    },
+    "Formula Rearrangement": {
+      "count": 2,
+      "confidence": "HIGH",
+      "examples": [
+        "M2Q28",
+        "M3Q24"
+      ]
+    },
+    "Polynomial Expressions and Factor Theorem": {
+      "count": 2,
+      "confidence": "HIGH",
+      "examples": [
+        "M2Q11",
+        "M3Q50"
+      ]
+    },
+    "Algebraic Fractions": {
+      "count": 1,
+      "confidence": "LOW - 1 example only",
+      "examples": [
+        "M1Q39"
+      ]
+    },
+    "Radicals": {
+      "count": 1,
+      "confidence": "LOW - 1 example only",
+      "examples": [
+        "M4Q48"
+      ]
+    },
+    "coverage_note": "Strong concentration in foundational algebraic conditions (inequalities, quadratics, absolute values). Advanced algebraic fractions and radicals underrepresented."
+  },
+  "difficulty_ladder": {
+    "mechanical_signals": {
+      "steps": "Easy = single-rule execution. Medium = execution plus verification.",
+      "concept_mixing": "Easy isolates subtopics. Medium fuses them.",
+      "qualifier_sensitivity": "Medium pivots on logical bounds (always, certainly, for all real values).",
+      "answer_similarity": "Wrong options vary by a single strict/non-strict inequality sign or parameter."
+    },
+    "recalibration": {
+      "genuine_easy": [
+        "M2Q42 (sum of absolute values < 0 -> empty set)",
+        "M3Q33 (same mechanism)",
+        "M2Q28 (basic variable isolation)",
+        "M3Q24 (basic variable isolation)"
+      ],
+      "should_be_medium": [
+        "M4Q1 (solve quadratic then filter against linear inequality domain)",
+        "M1Q27 (discriminant bounds)",
+        "M4Q23 (parameter axiom with a≠0 edge case)"
+      ],
+      "hardest_in_set": "M1Q39 — only true structural multi-step object (nested fractional simplification). Closest bridge to Hard classification."
+    },
+    "EASY": {
+      "description": "Single-rule execution. One concept. No domain verification required. Answer is immediate.",
+      "examples": [
+        "M2Q42",
+        "M3Q33",
+        "M2Q28",
+        "M3Q24"
+      ],
+      "signals": {
+        "steps": 1,
+        "concept_mixing": "none",
+        "qualifier_sensitivity": "none",
+        "answer_similarity": "low"
+      }
+    },
+    "MEDIUM": {
+      "description": "Execution followed by verification. Two concepts fused. Qualifier sensitivity active. Requires checking result against original constraint.",
+      "examples": [
+        "M4Q1",
+        "M1Q27",
+        "M2Q11",
+        "M4Q10",
+        "M1Q39"
+      ],
+      "signals": {
+        "steps": "2-3",
+        "concept_mixing": "medium",
+        "qualifier_sensitivity": "high",
+        "answer_similarity": "medium"
+      }
+    },
+    "HARD_blueprint": {
+      "description": "A parameter controls the number of valid solutions. Algebraically correct intermediate solutions must be rejected because they violate a secondary constraint. Requires simultaneous evaluation of multiple constraint domains.",
+      "blueprint_example": "For which values of k does x^2 - 4x + k = 0 AND |x-2| <= 1 have exactly one valid real solution? Forces simultaneous discriminant boundary evaluation AND geometric interval filtering — rejecting roots that fall outside the absolute value domain.",
+      "key_rule": "Hard questions present algebraically correct solutions that must be rejected because they violate a secondary constraint.",
+      "signals": {
+        "steps": "4+",
+        "concept_mixing": "high - two algebraic domains interact",
+        "qualifier_sensitivity": "extreme",
+        "answer_similarity": "high - options differ by which roots pass the filter"
+      }
+    }
+  },
+  "trap_and_error_architecture": {
+    "SIGN_ERROR": {
+      "mechanism": "Student mishandles negation during inequality operations — fails to flip inequality sign when dividing by negative.",
+      "examples": [
+        "M1Q27 (solving 36-4c>=0 by dividing by -4, forgetting to flip: yields c>=9 instead of c<=9)",
+        "M3Q17 (sign direction in chained inequalities)"
+      ]
+    },
+    "EXTRANEOUS_SOLUTION": {
+      "mechanism": "Student accepts mathematically valid intermediate solution that violates original premise or domain restriction.",
+      "examples": [
+        "M4Q1 (x^2=25 yields ±5, failing to filter -5 against x+4>0 — selects Two instead of One)",
+        "M4Q22 (extraneous bounds assumed)"
+      ]
+    },
+    "SHORTCUT": {
+      "mechanism": "Student applies memorised template while ignoring specific constraints stated in the problem.",
+      "examples": [
+        "M3Q38 (factors as (x-x1)(x-x2) ignoring mandatory leading coefficient a)",
+        "M4Q23 (assumes ax=b always has one solution, ignoring a≠0 requirement)"
+      ]
+    },
+    "SCOPE": {
+      "mechanism": "Student maps a locally true result to a global domain — conclusion valid for some values treated as valid for all.",
+      "examples": [
+        "M4Q10 (d1 and d2 share roots 1 and 2, student assumes same solution SET — fails to see squaring expands d2 to all R)",
+        "M2Q11 (assumes P(-1)=0 because P(1)=0)"
+      ]
+    },
+    "ZERO_INFINITY_EDGE_CASE": {
+      "mechanism": "Question pivots on what happens at a boundary value — zero, infinity, or empty set.",
+      "examples": [
+        "M2Q42 and M3Q33 (sum of absolute values < 0 yields empty set)",
+        "M1Q3 and M2Q46 (proportional linear systems yield infinite solutions)"
+      ]
+    },
+    "FACTORING_SHORTCUT": {
+      "mechanism": "Structural misidentification — student fails to recognise a factorable form and expands messily instead.",
+      "examples": [
+        "M3Q50 (fails to group (x-y-z)(x-z+y) as difference of squares (x-z)^2 - y^2)"
+      ]
+    },
+    "error_frequency_map": {
+      "most_common": "Extraneous Solution — accepting intermediate roots without domain verification",
+      "second": "Shortcut — applying general rule to specific case with additional constraint",
+      "third": "Sign Error — inequality direction on negative division",
+      "fourth": "Scope — local truth treated as global"
+    }
+  },
+  "time_pressure_anatomy": {
+    "verification_burden": "Primary time cost. Initial calculation is fast; cognitive shift to verify roots against secondary constraint is where time bleeds. M4Q1 and M1Q27 exemplify this — solving is instant, verification is the test.",
+    "false_speed_trap": "M4Q10 looks like a double-sign-chart inequality problem. Structurally aware student recognises (x-1)^2(x-2)^2 >= 0 is trivially true for all R — solves in 5 seconds instead of 2 minutes.",
+    "option_elimination_strategy": "M2Q3: premise states y<0<z. Option C is literally z>0 — a direct restatement. Students lose 90 seconds on complex algebra instead of scanning options. M2Q11: P(1)=0 instantly flags (x-1) as a factor — no polynomial division needed.",
+    "high_cost_questions": [
+      "M1Q39",
+      "M2Q11",
+      "M4Q1",
+      "M4Q10"
+    ],
+    "low_cost_questions": [
+      "M2Q42",
+      "M3Q33",
+      "M2Q3 (if elimination used)"
+    ]
+  },
+  "calibrated_uplift": {
+    "layer1_problem_structure": {
+      "constraint_layering": "Increase complexity by layering constraints without extending computation length. Fuse two subtopics (discriminant + logarithmic domain bounds).",
+      "medium_vs_easy_distinction": "M1Q39 harder because nested LCD resolution — single dropped denominator cascades to failure. M2Q11 harder because root maps to functional abstraction P(1)=0 => (x-1)Q(x), not numerical solving.",
+      "hard_structure": "Parameter controls the number of valid solutions. Solutions must satisfy a secondary constraint. Algebraically correct solutions that fail the secondary constraint are engineered as distractors."
+    },
+    "layer2_cognitive_load": {
+      "case_splitting": "Force explicit case splits: |x-2| = 2x-1 requires two branches, each with extraneous solution filtering.",
+      "domain_restriction": "Require verification of domain restrictions after every solution step.",
+      "parametric_framing": "Use unknown constants a, b, c to strip away the student's ability to verify by testing integers."
+    },
+    "layer3_answer_engineering": {
+      "model": {
+        "correct": "Logically airtight intersection of all constraints",
+        "extraneous_trap": "Most critical distractor — root derived from intermediate algebra that fails original domain restriction",
+        "sign_error_trap": "Reverses inequality on negative division or flips critical root sign",
+        "shortcut_trap": "Standard formula applied while ignoring edge case in stem",
+        "scope_trap": "Conclusion true for localised subset stated as universally true via qualifier"
+      },
+      "mapping_example": "Discriminant parameter c: Correct (c<=9) | Sign Error (c>=9) | Shortcut Arithmetic (c<=6) | Scope Trap (for any real value)",
+      "elimination_mapping_rule": "Every wrong option derives from a specific algebraic error. Options must be algebraically plausible, never numerically random."
+    }
+  },
+  "figure_scenario_patterns": {
+    "figures_present": 0,
+    "note": "Full dataset review confirms 0 questions contain figures. Bocconi Algebra is overwhelmingly pure symbolic.",
+    "framing_dictates_difficulty": {
+      "abstract_symbolic": "Variables or financial parameters without real-world context force purely syntactic manipulation (M2Q28).",
+      "explicit_vs_implicit_conditions": "'The equation certainly has' (M2Q27) tests sufficiency — student must prove universal validity, not find one case.",
+      "parametric_isolation": "Unknown constants a, b, c (M3Q38, M4Q23) strip ability to verify by testing integers — pure algebraic logic required."
+    }
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "certainly",
+      "necessarily",
+      "always",
+      "for all real values",
+      "only if",
+      "no solution",
+      "infinite solutions",
+      "exactly one"
+    ],
+    "necessary_vs_sufficient_confusion": {
+      "description": "The primary Algebra ambiguity mechanism. Students treat a sufficient condition as necessary, or a necessary condition as sufficient. When a question asks 'for which values does X certainly occur', the correct answer requires proving the condition holds universally. Students select answers that make it possible rather than certain.",
+      "examples": [
+        "M2Q27 (equation certainly has two equal solutions — student selects condition that makes it possible, not certain)",
+        "M1Q27 (for which values does the equation allow real solutions — confusion between necessary and sufficient discriminant bound)",
+        "M4Q23 (ax=b has one solution — student forgets a≠0 is necessary, not just common)"
+      ]
+    },
+    "near_correct_phrasing": {
+      "visual_similarity_trap": "M4Q10 Option A — d1 and d2 have same roots (1 and 2) so student assumes same solution SET, missing that squaring expands the interval.",
+      "special_case_distractors": "Answers that are correct for a specific value but wrong in general — M4Q23 assumes a≠0 is always satisfied."
+    }
+  },
+  "generation_fingerprint": "## ALGEBRA GENERATION FINGERPRINT\n\nBocconi Algebra tests structural recognition over computation speed. Difficulty stems from logical precision and constraint verification, never from equation length. Due to dataset undercalibration, treat historically Easy-tagged questions as Medium expectations for generation. There are 0 Hard Algebra questions in the dataset — use the Hard blueprint below exclusively for Hard generation.\n\nPROBLEM STRUCTURE AND CALIBRATED UPLIFT:\nMedium: Pair algebraic execution with mandatory domain verification. Require computation followed by checking results against a secondary constraint (extracting roots then verifying against linear inequality).\nHard: A parameter must control the number of valid solutions. Hard questions present algebraically correct solutions that must be rejected because they violate a secondary constraint. Wrong answers are engineered as the solutions that pass the first constraint but fail the second.\n\nTRAP AND ANSWER ENGINEERING MODEL:\nExtraneous solution filtering is the central difficulty mechanism. Every wrong option must derive from a specific algebraic error.\nCorrect: Logically airtight intersection of all constraints.\nExtraneous Trap: Root from intermediate algebra that fails original domain restriction — the most critical distractor.\nSign Error Trap: Inequality direction reversed on negative division.\nShortcut Trap: General formula applied while ignoring edge case in stem.\nScope Trap: Conclusion true locally but stated universally via qualifier (always, certainly, for all real values).\n\nNECESSARY VS SUFFICIENT CONFUSION (primary ambiguity mechanism):\nWhen stems use certainly, necessarily, or always — students systematically confuse sufficient conditions with necessary ones. A correct answer requires the condition to hold universally. Wrong answers make it possible. Engineer distractors to exploit this: one option is true for a specific case, the correct option is true for all cases.\n\nCOGNITIVE FRAMING:\nEmbed logical qualifiers to shift task from calculation to deduction. Force explicit case splitting for absolute value questions. Use parametric forms (unknown constants a, b, c) to remove integer-testing shortcuts. Algebraic objects should appear visually concise — cognitive load concealed within the interaction of mathematical boundaries, not visible in equation length.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

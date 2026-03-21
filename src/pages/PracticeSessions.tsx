@@ -3,8 +3,8 @@ import { useStore, SavedSession, QuestionBatch } from '../store/useStore';
 import { formatDate } from '../lib/constants';
 import QuestionBatchView from '../components/QuestionBatchView';
 import SessionAnalysis from '../components/SessionAnalysis';
-import { Button } from '../components/ui/Button';
-import { Card, CardContent } from '../components/ui/Card';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { BrainCircuit, Clock, Target, Plus, ChevronLeft, Edit2, Check, X, Trash2 } from 'lucide-react';
 
 export default function PracticeSessions() {

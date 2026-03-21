@@ -32,6 +32,17 @@ export default async function handler(req: Request) {
       });
     }
 
+    if (body.action === 'embedContent') {
+      const ai = new GoogleGenAI({ apiKey });
+      const { model, contents } = body;
+      const response = await ai.models.embedContent({ model, contents });
+      const embedding = response.embeddings?.[0]?.values ?? [];
+      return new Response(JSON.stringify({ embedding }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     return new Response(JSON.stringify({ error: 'Invalid action' }), { status: 400 });
   } catch (err: any) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });

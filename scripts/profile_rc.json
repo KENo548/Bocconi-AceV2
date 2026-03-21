@@ -1,0 +1,355 @@
+{
+  "topic": "Reading comprehension",
+  "coverage_map": {
+    "passage_types": {
+      "Scientific/Medical": {
+        "count": 12,
+        "confidence": "HIGH",
+        "examples": [
+          "Mock1Q9",
+          "Mock1Q16",
+          "Mock1Q34",
+          "Mock2Q2",
+          "Mock2Q17",
+          "Mock2Q20",
+          "Mock2Q21",
+          "Mock3Q11",
+          "Mock3Q18",
+          "Mock4Q25",
+          "Mock4Q32",
+          "Mock4Q41"
+        ]
+      },
+      "Historical": {
+        "count": 7,
+        "confidence": "HIGH",
+        "examples": [
+          "Mock1Q12",
+          "Mock2Q6",
+          "Mock2Q22",
+          "Mock3Q10",
+          "Mock3Q49",
+          "Mock4Q27",
+          "Mock4Q45"
+        ]
+      },
+      "Economic/Data-heavy": {
+        "count": 9,
+        "confidence": "HIGH",
+        "examples": [
+          "Mock1Q7",
+          "Mock1Q26",
+          "Mock1Q28",
+          "Mock2Q29",
+          "Mock3Q8",
+          "Mock3Q15",
+          "Mock3Q40",
+          "Mock4Q2",
+          "Mock4Q4"
+        ]
+      },
+      "Philosophical/Theoretical": {
+        "count": 4,
+        "confidence": "HIGH",
+        "examples": [
+          "Mock1Q33",
+          "Mock2Q26",
+          "Mock2Q49",
+          "Mock3Q41"
+        ]
+      },
+      "Sociological/Political": {
+        "count": 5,
+        "confidence": "HIGH",
+        "examples": [
+          "Mock1Q35",
+          "Mock3Q14",
+          "Mock3Q25",
+          "Mock3Q45",
+          "Mock4Q29"
+        ]
+      },
+      "Narrative": {
+        "count": 2,
+        "confidence": "MED",
+        "examples": [
+          "Mock2Q33",
+          "Mock2Q50"
+        ]
+      }
+    },
+    "question_types": {
+      "Direct Factual Retrieval": {
+        "count": 12,
+        "confidence": "HIGH"
+      },
+      "Inference/Main Idea": {
+        "count": 22,
+        "confidence": "HIGH"
+      },
+      "Deep Inference": {
+        "count": 3,
+        "confidence": "MED-HIGH"
+      },
+      "Vocabulary in Context": {
+        "count": 5,
+        "confidence": "HIGH"
+      },
+      "Deduction (T/F format)": {
+        "count": 2,
+        "confidence": "MED"
+      },
+      "Pronoun Resolution": {
+        "count": 1,
+        "confidence": "LOW"
+      }
+    }
+  },
+  "difficulty_ladder": {
+    "LITERAL": {
+      "description": "Answer explicitly stated in one sentence, no transformation required",
+      "examples": [
+        "Mock2Q17",
+        "Mock3Q18"
+      ],
+      "signals": {
+        "steps": 1,
+        "concept_mixing": "none",
+        "trap_presence": "low",
+        "data_density": "low"
+      }
+    },
+    "PARAPHRASE": {
+      "description": "Same idea as passage in different wording, conceptual mapping required",
+      "examples": [
+        "Mock4Q4"
+      ],
+      "signals": {
+        "steps": 1,
+        "concept_mixing": "low",
+        "trap_presence": "medium",
+        "data_density": "medium"
+      }
+    },
+    "INFERENCE": {
+      "description": "Requires combining 2+ passage parts or performing intermediate logical/math step",
+      "examples": [
+        "Mock1Q7"
+      ],
+      "signals": {
+        "steps": 2,
+        "concept_mixing": "medium",
+        "trap_presence": "high",
+        "data_density": "medium"
+      }
+    },
+    "DEEP_INFERENCE": {
+      "description": "Must actively disprove wrong answers using restrictive qualifiers, multiple plausible options remain after first pass",
+      "examples": [
+        "Mock4Q32",
+        "Mock4Q41"
+      ],
+      "signals": {
+        "steps": "3+",
+        "concept_mixing": "high",
+        "trap_presence": "high",
+        "data_density": "high"
+      }
+    },
+    "AMBIGUITY_RESOLUTION": {
+      "description": "2+ options seem correct, distinction depends entirely on qualifiers/scope/certainty level",
+      "examples": [
+        "Mock1Q33"
+      ],
+      "signals": {
+        "steps": "3+",
+        "concept_mixing": "high",
+        "trap_presence": "very_high",
+        "data_density": "high"
+      }
+    },
+    "transition_conditions": {
+      "Literal_to_Paraphrase": "Lexical change without structural change",
+      "Paraphrase_to_Inference": "Requires combining >= 2 sentences",
+      "Inference_to_DeepInference": ">=2 options remain plausible after first-pass elimination",
+      "DeepInference_to_AmbiguityResolution": "Distinction depends entirely on qualifiers"
+    },
+    "HARD_blueprint": {
+      "description": "Hard RC questions combine inference requirement with maximum answer choice similarity. Two options survive first-pass elimination and are distinguishable only by a single qualifier or scope difference. The passage is typically abstract or philosophical with high noun density.",
+      "cognitive_load_level": "AMBIGUITY_RESOLUTION",
+      "answer_engineering": "2 options both textually supported at surface level, distinguished only by certainty/scope/qualifier. Correct option uses weak qualifier (may, suggests). Wrong option uses strong qualifier (must, necessarily, always).",
+      "generation_note": "Hard RC = Medium RC problem + answer choices engineered to maximum similarity. Do NOT increase passage complexity — increase option indistinguishability.",
+      "examples_from_dataset": [
+        "[EXTRAPOLATED — 0 Hard RC examples in dataset]"
+      ],
+      "signals": {
+        "steps": "4-5",
+        "concept_mixing": "high",
+        "qualifier_sensitivity": "extreme",
+        "answer_similarity": "maximum — 2 options nearly identical"
+      }
+    }
+  },
+  "trap_and_error_architecture": {
+    "trap_types": {
+      "TEXTUAL_ECHO": {
+        "frequency": "HIGH - 15+ occurrences",
+        "mechanism": "Copies exact words from passage but scrambles syntactic relationship",
+        "examples": [
+          "Mock4Q41 Option E"
+        ]
+      },
+      "EXTREME_LANGUAGE": {
+        "frequency": "HIGH - 10+ occurrences",
+        "mechanism": "Takes qualified passage statement and upgrades to absolute",
+        "examples": [
+          "Mock4Q41 Option A",
+          "Mock3Q15 Option E"
+        ]
+      },
+      "SCOPE_SHIFT": {
+        "frequency": "MED - 7 occurrences",
+        "mechanism": "Applies valid claim to broader/narrower/different scope",
+        "examples": [
+          "Mock4Q32 Option E"
+        ]
+      },
+      "OUTSIDE_KNOWLEDGE": {
+        "frequency": "MED - 5 occurrences",
+        "mechanism": "Factually true in real world but absent from passage",
+        "examples": [
+          "Mock1Q9 Option A"
+        ]
+      },
+      "HALF_TRUE": {
+        "frequency": "MED - 5 occurrences",
+        "mechanism": "First clause matches passage, second clause contradicts",
+        "examples": [
+          "Mock1Q35 Option D"
+        ]
+      },
+      "NUMERICAL_CLOSENESS": {
+        "frequency": "LOW - 2 occurrences",
+        "mechanism": "Requires exact mathematical deduction from passage data",
+        "examples": [
+          "Mock1Q7 Option E"
+        ]
+      }
+    },
+    "error_frequency_map": {
+      "most_common": "Pattern-matching instead of semantic comprehension — Textual Echo Traps",
+      "second_most_common": "Failing to verify exact scope of modifiers — Extreme Language Traps",
+      "third_most_common": "Accepting outside knowledge as passage evidence — Outside Knowledge Traps"
+    }
+  },
+  "time_pressure_anatomy": {
+    "high_cost_passage_types": [
+      "Dense theoretical (Mock2Q26)",
+      "Philosophical (Mock4Q4)",
+      "Economic with data (Mock1Q7)"
+    ],
+    "high_cost_question_types": [
+      "Negative factual questions requiring verification of 4 true statements"
+    ],
+    "quantifiable_signals": {
+      "back_and_forth": ">=2 returns to passage per question",
+      "option_length": "Options >20 words with >=2 clauses (Mock4Q32, Mock4Q41)",
+      "shared_opening": ">=3 options with same opening phrase forces deep reading",
+      "negative_stems": "NOT/FALSE stems double verification time",
+      "abstract_noun_density": "High usage of system/structure/relation slows conceptual mapping"
+    }
+  },
+  "calibrated_uplift": {
+    "layer1_stem_transformation": {
+      "rule": "Replace direct interrogatives with global evaluation stems",
+      "examples": "Change 'When did X occur?' to 'Based on the passage, which statement is true regarding X?'",
+      "observed_signals": [
+        "'Based on the information... it is correct to state that'",
+        "'What can you correctly infer...'"
+      ]
+    },
+    "layer2_cognitive_load": {
+      "rule1": "Add extra step: require mathematical subtraction of two stated numbers (Mock1Q7)",
+      "rule2": "Invert search parameter to negative logic: 'Which statement is false/not in line'"
+    },
+    "layer3_answer_engineering": {
+      "similarity_injection": "Begin multiple options with identical phrasing to prevent skimming",
+      "target_model": "1 Correct (Paraphrase) + 1 Textual Echo + 1 Extreme Language + 1 Outside Knowledge + 1 Scope Shift"
+    },
+    "layer4_ambiguity_injection": {
+      "mechanism": "Introduce >=2 options both logically plausible and text-adjacent",
+      "execution": "Distinguish only by qualifiers, scope, or certainty level"
+    }
+  },
+  "passage_interaction_patterns": {
+    "reference_types": {
+      "line_based": {
+        "description": "Isolates single phrase, traps use real-world definition instead of contextual",
+        "examples": [
+          "Mock2Q22",
+          "Mock4Q29"
+        ]
+      },
+      "paragraph_based": {
+        "description": "Tests relationships within segment, traps invert cause/effect",
+        "examples": [
+          "Mock2Q26"
+        ]
+      },
+      "global": {
+        "description": "Requires synthesising entire text, traps use half-true paragraph summaries",
+        "examples": [
+          "Mock4Q32",
+          "Mock4Q41"
+        ]
+      }
+    },
+    "passage_structures": [
+      "Argument: Claim→Evidence→Conclusion (Mock4Q4)",
+      "Scientific: Definition→Application/Exception (Mock1Q9,Mock3Q18)",
+      "Narrative: Event→Consequence (Mock2Q6,Mock4Q27)"
+    ],
+    "trap_density_zones": {
+      "definitions": "Textual echo traps",
+      "conclusions": "Extreme language traps",
+      "transitions": "Scope shift traps"
+    }
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": {
+      "weak_qualifiers_correct_signals": [
+        "may",
+        "might",
+        "suggests",
+        "tends to",
+        "can be said"
+      ],
+      "strong_qualifiers_trap_indicators": [
+        "must",
+        "necessarily",
+        "always",
+        "only",
+        "completely",
+        "permanent",
+        "totally"
+      ],
+      "scope_markers": [
+        "all",
+        "some",
+        "most",
+        "few",
+        "totality"
+      ]
+    },
+    "core_failure_mechanism": "Upgrading textual certainty: 'supported' to 'true', 'possible' to 'certain'",
+    "ambiguity_trigger": ">=2 options textually supported at surface level but differ in certainty, scope, or logical necessity",
+    "tf_c_rules": {
+      "TRUE": "Explicitly supported or logically necessary byproduct",
+      "FALSE": "Directly contradicted by passage boundaries",
+      "CANNOT_BE_DEDUCED": "Not provable OR requires outside assumption"
+    }
+  },
+  "generation_fingerprint": "## RC GENERATION FINGERPRINT\n\nTo replicate the Bocconi RC difficulty engine, adhere to the evil answer choices principle: passage complexity is secondary. Cognitive load must be generated entirely through option engineering. The text should be accessible; the path to the correct answer must require rigorous defensive elimination.\n\nOPTION ENGINEERING AND TRAPS:\nNever write an obviously false wrong answer. Every distractor must be anchored to the text.\nTextual Echo: Lift 3-5 verbatim words from the passage and scramble their syntactic relationship.\nExtreme Language: Take a valid passage claim and quietly append an absolute qualifier (completely, only, always, totality).\nOutside Knowledge: Write an option representing common sense or real-world fact explicitly missing from the passage.\nScope Shift: Expand a local example into a global rule, or project a present condition into an indefinite future.\nHalf-True: First clause matches passage exactly, second clause contradicts or overextends.\n\nCOGNITIVE LOAD TARGETING:\nLiteral/Paraphrase: Correct option is semantic mirror of one passage sentence in different vocabulary.\nInference: Require combining >=2 sentences or performing basic mental math.\nDeep Inference: Use options >20 words with >=2 clauses. Force >=2 options to survive first-pass elimination.\nAnswer Similarity Rule: At least 2 distractors MUST survive first-pass elimination, distinguished only by subtle qualifiers.\n\nAMBIGUITY PATTERN:\nEmbed the primary ambiguity pattern: Plausible vs Supported.\nUse weak qualifiers (may, might, suggests) for correct answers.\nUse strong qualifiers (must, necessarily, always, only) and scope markers (all, most) to poison otherwise accurate distractors.\n\nELIMINATION MAPPING RULE (CRITICAL):\nEvery distractor must correspond to a specific trap type. The generator must be able to state exactly which student mistake leads to selecting each wrong option.\nModel: Option B = Textual Echo (student matches keywords without verifying relationship), Option C = Extreme Language (student accepts claim without checking qualifier), Option D = Outside Knowledge (student imports real-world assumption), Option E = Scope Shift (student extends local claim to global rule).\nA question is only complete when every wrong answer maps to a traceable cognitive error.",
+  "question_count": 46,
+  "approved": false
+}

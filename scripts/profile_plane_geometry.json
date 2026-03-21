@@ -1,0 +1,151 @@
+{
+  "topic": "Plane Geometry",
+  "approved": false,
+  "question_count": 3,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Triangle Inequality",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M2Q10"
+        ]
+      },
+      {
+        "name": "Triangles / Special Right",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M4Q28"
+        ]
+      },
+      {
+        "name": "Circles and Triangles",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M4Q37"
+        ]
+      }
+    ],
+    "coverage_assessment": "Geometry representation is exceedingly sparse. Missing entirely are coordinate geometry, area/perimeter ratios, similar triangles, sector areas, and composite shapes. Existing questions test standalone theorems (Triangle Inequality, 45-45-90, Inscribed Rectangle) with direct numerical application."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [
+        "M2Q10",
+        "M4Q28",
+        "M4Q37"
+      ],
+      "steps_required": "1 to 2 steps (apply one theorem, compute)",
+      "concept_mixing": "Very low.",
+      "qualifier_sensitivity": "High ('radius' vs 'diameter', 'whole range')",
+      "answer_similarity": "Moderate."
+    },
+    "medium": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "3 to 4 steps",
+      "concept_mixing": "Area formulas mixed with inscribed shape properties",
+      "qualifier_sensitivity": "High",
+      "answer_similarity": "High; choices reflect missing a π or failing to square a scale factor"
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "5+ steps",
+      "concept_mixing": "Composite shapes requiring abstract variable manipulation",
+      "qualifier_sensitivity": "Very high",
+      "answer_similarity": "Extremely high"
+    }
+  },
+  "trap_and_error_architecture": {
+    "distractor_engine": {
+      "input_structure": "Nested visual geometry (Rectangle in Circle) + requested derived metric (Radius)",
+      "correct_transformation": "Core Theorem application (e.g., Pythagorean) → Secondary conversion step (Diameter / 2)",
+      "finite_distractor_set": [
+        "Output of Core Theorem exactly — Intermediate Step Trap: returning diameter instead of radius, maps to M4Q37: 15",
+        "Wrong Constant Application — √3 instead of √2 or vice versa, maps to M4Q28: Options A/C",
+        "Degenerate Bound Omission — returning |AB-AC| < BC instead of 0 < BC when checking triangle inequality, maps to M2Q10: Option A"
+      ]
+    },
+    "traps": [
+      {
+        "name": "Intermediate Step Trap",
+        "mechanism": "Student correctly computes the penultimate result (the diameter = 15) and selects it directly, bypassing the final conversion step required by the question (radius = diameter/2).",
+        "refs": [
+          "M4Q37"
+        ],
+        "name_normalized": "INTERMEDIATE_STEP_TRAP"
+      },
+      {
+        "name": "Wrong Constant Application",
+        "mechanism": "Student applies √3 (from 30-60-90 triangle) instead of √2 (from 45-45-90 triangle), or vice versa.",
+        "refs": [
+          "M4Q28"
+        ],
+        "name_normalized": "WRONG_CONSTANT_APPLICATION"
+      },
+      {
+        "name": "Degenerate Bound Omission",
+        "mechanism": "Student applies |AB-AC| as the lower bound of the triangle inequality, getting 0 (since AB=AC), but misreads this as the lower bound being 20 (confusing strict inequality with the non-degenerate case).",
+        "refs": [
+          "M2Q10"
+        ],
+        "name_normalized": "DEGENERATE_BOUND_OMISSION"
+      }
+    ],
+    "elimination_mapping": {
+      "M2Q10": {
+        "A": "Degenerate bound confusion — applied lower bound as |AB-AC|=0 but then stated 'between 20 and 40' (non-zero lower bound assumption)",
+        "C": "Wrong theorem direction — added both sides: 20+40=60 as upper bound",
+        "D": "Restricted to one side only — assumed BC ≤ AB = 20",
+        "E": "Arbitrary restriction — no clear mathematical derivation"
+      },
+      "M4Q28": {
+        "A": "Applied 30-60-90 relationship incorrectly: confused hypotenuse and leg roles, resulting in arithmetic error (≈ 4.2)",
+        "C": "Applied 30-60-90 formula: 5/√3",
+        "D": "Meta-trap — insufficient data bailout",
+        "E": "Applied wrong formula: 4/√3"
+      },
+      "M4Q37": {
+        "A": "Returned the full diagonal (diameter = 15) — Intermediate Step Trap",
+        "B": "Used only one side in Pythagorean: √(9²) or scaling error → 5",
+        "C": "Pythagorean arithmetic error → 25",
+        "D": "Miscalculated one side or scaling error → 6.5",
+        "E": "Used only one side: 12/2+? or scaling error → 10"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "description": "Because questions are mechanically simple, time pressure manifests as rushing the final conversion step. The student calculates 9²+12²=15, sees 15 in the answer choices, and selects it immediately to bank time, entirely bypassing the final word 'radius'. The questions are solved fast but the final step is the trap."
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure.",
+    "layer_1_problem_structure_mutation": "Placing a familiar shape inside another to force recognition of shared properties (diagonal = diameter).",
+    "layer_2_cognitive_load_injection": "Using side lengths that mandate mental Pythagorean triplet calculations without a calculator.",
+    "layer_3_answer_engineering": "MOST WEIGHT. The hardest element is that intermediate calculations precisely match standard distractors. Every penultimate result must appear as a wrong option."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 2,
+    "figure_refs": [
+      "M4Q28",
+      "M4Q37"
+    ],
+    "description": "Figures act as rapid visual anchors but punish students who rely on visual scale rather than mathematical properties. The 45° angles in M4Q28 must trigger the formula regardless of how the triangle is drawn. The primary risk is bypassing the prompt text and calculating the most visually obvious metric rather than the requested one."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "whole range",
+      "radius",
+      "what is the value of x"
+    ],
+    "primary_ambiguity_mechanism": "'Whole range of valid distances' requires grasping degenerate bounds (approaching 0). The ambiguity lies in whether limits are strict inequalities or absolute bounds, testing conceptual theorem grasp over pure formula execution.",
+    "near_correct_construction": "Second-closest options are the exact intermediate calculation result (diameter instead of radius, full diagonal instead of half diagonal)."
+  },
+  "generation_fingerprint": "## PLANE GEOMETRY GENERATION FINGERPRINT\n\nBocconi Plane Geometry is highly restricted, testing foundational theorems with minimal multi-step complexity. The dataset covers only three question types: special right triangles, triangle inequalities, and inscribed shapes. All three questions are Easy with 0 Medium and 0 Hard examples — difficulty is entirely extrapolated.\n\nDISTRACTOR ENGINE: Dominated by the Intermediate Step Trap — distractors are the exact numerical output of the penultimate calculation step.\n- Intermediate Step Trap (PRIMARY): student correctly computes the second-to-last result (e.g., the diameter = 15) and selects it as the answer, missing the final conversion step (radius = diameter/2 = 7.5). Every geometry question must have this distractor.\n- Wrong Constant Trap: student confuses √3 with √2 or vice versa in special right triangle calculations. Options A and C in M4Q28 exemplify this.\n- Degenerate Bound Omission: in triangle inequality questions, student returns the algebraic bound |AB-AC| < BC without recognising that the lower bound is always strictly positive, giving the correct range as 0 < BC < |AB+AC|.\n- Missing Conversion Step: student returns an area instead of a side length, or a perimeter instead of an area.\n\nANSWER ENGINEERING MODEL: 1 correct (all steps completed, correct theorem, correct constants) + 1 intermediate step result + 1 wrong constant (√3 vs √2) + 1 missing final conversion + 1 degenerate bound.\n\nQUALIFIER INVENTORY: radius vs diameter, height vs hypotenuse, perimeter vs area, whole range. These precision switches are where nearly all errors occur.\n\nCALIBRATED UPLIFT: Easy = single theorem application, one conversion. Medium = two theorems applied sequentially, composite shape. Hard = algebraic variable representing a side length with multiple simultaneous constraints.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}

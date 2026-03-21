@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   LineChart, Line, PieChart, Pie, Cell, ScatterChart, Scatter
 } from 'recharts';
-import { ChartData } from '../services/gemini';
+import { ChartData } from '../services/groq';
 
 const COLORS = ['#233A2E', '#B89E58', '#4A5D23', '#7A3E3E', '#5B6B8A', '#8B5E3C'];
 

@@ -3,13 +3,12 @@ import Analysis from './pages/Analysis';
 import PracticeSessions from './pages/PracticeSessions';
 import PaperBuilder from './pages/PaperBuilder';
 import Repository from './pages/Repository';
-import Ingest from './pages/Ingest';
 import ChatBot from './components/ChatBot';
-import { BrainCircuit, BarChart2, PenTool, History as HistoryIcon, Bot, FileText, BookOpen, Database } from 'lucide-react';
+import { BrainCircuit, BarChart2, PenTool, History as HistoryIcon, Bot, FileText, BookOpen } from 'lucide-react';
 import { useStore } from './store/useStore';
 
 export default function App() {
-  type Tab = 'analysis' | 'practice' | 'builder' | 'repository' | 'ingest';
+  type Tab = 'analysis' | 'practice' | 'builder' | 'repository';
   const [activeTab, setActiveTab] = useState<Tab>('practice');
   const { openChat } = useStore();
 
@@ -66,16 +65,6 @@ export default function App() {
                 <BookOpen className="w-4 h-4" />
                 <span className="hidden sm:inline">Repository</span>
               </button>
-              <button
-                onClick={() => setActiveTab('ingest')}
-                className={`px-3 py-2 rounded-sm text-sm font-medium transition-colors flex items-center space-x-2 shrink-0 ${activeTab === 'ingest'
-                  ? 'bg-hunter-green text-cream-bg'
-                  : 'text-old-ink/70 hover:text-hunter-green hover:bg-cream-bg'
-                  }`}
-              >
-                <Database className="w-4 h-4" />
-                <span className="hidden sm:inline">Ingest Data</span>
-              </button>
 
               <div className="w-px h-6 bg-old-border mx-2 self-center shrink-0"></div>
               <button
@@ -90,13 +79,12 @@ export default function App() {
         </div>
       </header>
 
-      <main className={`mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full ${activeTab === 'builder' || activeTab === 'repository' ? 'max-w-[1600px]' : 'max-w-6xl'
-        }`}>
+      <main className={`mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full ${activeTab === 'builder' || activeTab === 'repository' ? 'max-w-[1600px]' : 'max-w-6xl'}`}>
+      
         {activeTab === 'analysis' && <Analysis />}
         {activeTab === 'practice' && <PracticeSessions />}
         {activeTab === 'builder' && <PaperBuilder />}
         {activeTab === 'repository' && <Repository />}
-        {activeTab === 'ingest' && <Ingest />}
       </main>
 
       <ChatBot />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button } from '../components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/Card';
-import { generateQuestions, GeneratedQuestion, QuestionRequest } from '../services/gemini';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import { generateQuestions, GeneratedQuestion, QuestionRequest } from '../services/groq';
 import { useStore, QuestionConfig } from '../store/useStore';
 import { Loader2, Plus, Trash2, Check, X, FileText, Save, BrainCircuit, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -9,7 +9,7 @@ import PaperSection from '../components/PaperSection';
 import { SYLLABUS, MathText } from '../lib/constants';
 import QuestionFigure from '../components/QuestionFigure';
 export default function PaperBuilder() {
-  const { addPaper, mockQuestions, learnedStyleProfile, paperBuilderState, setPaperBuilderState } = useStore();
+  const { addPaper, mockQuestions, paperBuilderState, setPaperBuilderState } = useStore();
 
   const { configs, generatedQuestions, acceptedQuestions, paperName } = paperBuilderState;
 
@@ -69,13 +69,8 @@ export default function PaperBuilder() {
       let aiQs: GeneratedQuestion[] = [];
 
       if (aiConfigs.length > 0) {
-        const topicsToGenerate = new Set(aiConfigs.map(c => c.topic));
-        const contextMocks = mockQuestions
-          .filter(mq => topicsToGenerate.has(mq.topic))
-          .sort(() => 0.5 - Math.random())
-          .slice(0, 5);
-
-        aiQs = await generateQuestions(aiConfigs, contextMocks, learnedStyleProfile);
+        // New groq.ts handles Supabase profile + example fetching internally
+        aiQs = await generateQuestions(aiConfigs);
       }
 
       let aiIndex = 0;

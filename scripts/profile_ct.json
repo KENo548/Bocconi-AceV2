@@ -1,0 +1,357 @@
+{
+  "topic": "Critical thinking",
+  "approved": false,
+  "question_count": 34,
+  "sub_profiles": [
+    "5-option Logic Questions",
+    "True/False/Cannot Be Deduced"
+  ],
+  "coverage_map": {
+    "sub_profile_a_5option": {
+      "Syllogistic Reasoning and Categorical Deduction": {
+        "frequency": "HIGH",
+        "confidence": "HIGH",
+        "examples": [
+          "M1Q6",
+          "M1Q48",
+          "M2Q16",
+          "M2Q32",
+          "M2Q35",
+          "M2Q40",
+          "M3Q6",
+          "M3Q21",
+          "M4Q33"
+        ]
+      },
+      "Relational Ordering and Ranking": {
+        "frequency": "HIGH",
+        "confidence": "HIGH",
+        "examples": [
+          "M1Q2",
+          "M1Q13",
+          "M1Q50",
+          "M3Q20",
+          "M4Q3"
+        ]
+      },
+      "Constraint Satisfaction and Set Logic": {
+        "frequency": "MED",
+        "confidence": "HIGH",
+        "examples": [
+          "M2Q48",
+          "M3Q35",
+          "M4Q6",
+          "M4Q36"
+        ]
+      },
+      "Negation of Quantifiers": {
+        "frequency": "LOW",
+        "confidence": "HIGH",
+        "examples": [
+          "M3Q5",
+          "M4Q50"
+        ]
+      },
+      "Algorithmic/Procedural Logic": {
+        "frequency": "LOW",
+        "confidence": "HIGH",
+        "examples": [
+          "M4Q13",
+          "M4Q34"
+        ]
+      },
+      "Truth-and-Lie Puzzle": {
+        "frequency": "LOW",
+        "confidence": "LOW - 1 example only",
+        "examples": [
+          "M1Q10"
+        ]
+      },
+      "Kinship Logic": {
+        "frequency": "LOW",
+        "confidence": "LOW - 1 example only",
+        "examples": [
+          "M1Q21"
+        ]
+      },
+      "Necessary/Sufficient Conditions (Abstract notation)": {
+        "frequency": "LOW",
+        "confidence": "LOW - 1 example only",
+        "examples": [
+          "M1Q46"
+        ]
+      },
+      "Counterexample Identification": {
+        "frequency": "LOW",
+        "confidence": "LOW - 1 example only",
+        "examples": [
+          "M3Q28"
+        ]
+      }
+    },
+    "sub_profile_b_tfc": {
+      "answer_distribution": {
+        "True": 2,
+        "False": 3,
+        "Cannot_Be_Deduced": 1
+      },
+      "answer_examples": {
+        "True": [
+          "M1Q8",
+          "M4Q49"
+        ],
+        "False": [
+          "M1Q37",
+          "M3Q26",
+          "M4Q44"
+        ],
+        "Cannot_Be_Deduced": [
+          "M3Q48"
+        ]
+      },
+      "statement_types": {
+        "Directly Contradicted (False)": "Statement structurally violates premises under all valid models (M3Q26, M4Q44)",
+        "Logically Necessary (True)": "Statement strictly entailed by premise-to-conclusion structure (M1Q8, M4Q49)",
+        "Underdetermined (Cannot Be Deduced)": "Statement consistent with passage but not provable — missing a necessary premise (M3Q48)"
+      }
+    }
+  },
+  "difficulty_ladder": {
+    "sub_profile_a": {
+      "EASY": {
+        "description": "Single-step deductions or simple linear chains. Explicit universal quantifiers with low data density and zero overlapping categories. Correct answer is a direct mapping of the premise.",
+        "examples": [
+          "M1Q50",
+          "M4Q3",
+          "M3Q5",
+          "M3Q28"
+        ],
+        "signals": {
+          "steps": 1,
+          "concept_mixing": "none",
+          "qualifier_sensitivity": "minimal",
+          "data_density": "low"
+        }
+      },
+      "MEDIUM": {
+        "description": "2-3 step deductions mixing categorical logic with implicit constraints. Introduces the necessarily true/false qualifier sensitivity — requires testing multiple configurations to distinguish what could happen from what must happen.",
+        "examples": [
+          "M2Q16",
+          "M2Q40",
+          "M4Q6",
+          "M1Q2",
+          "M3Q35"
+        ],
+        "signals": {
+          "steps": "2-3",
+          "concept_mixing": "medium",
+          "qualifier_sensitivity": "high",
+          "data_density": "medium"
+        }
+      },
+      "HARD": {
+        "description": "High data density combining multiple mathematical and logical domains. Requires holding 4+ constraints in working memory simultaneously. Heavy qualifier sensitivity where every wrong option is an engineered reasoning failure.",
+        "examples": [
+          "M2Q48 (membership + inequalities)",
+          "M4Q20 (conditional branching + sets)",
+          "M1Q6 (syllogistic contrapositives + negations)"
+        ],
+        "signals": {
+          "steps": "4+",
+          "concept_mixing": "high",
+          "qualifier_sensitivity": "extreme",
+          "data_density": "high"
+        }
+      },
+      "HARD_blueprint": {
+        "description": "Hard CT questions require maintaining 4+ simultaneous constraints where multiple valid models exist. The correct answer is the only statement invariant across ALL valid models. Every wrong option is derivable from a specific reasoning failure on one valid model.",
+        "key_rule": "The correct answer holds under every possible valid configuration. Wrong answers hold under only some configurations.",
+        "examples": [
+          "M1Q6",
+          "M2Q48",
+          "M4Q20"
+        ],
+        "signals": {
+          "steps": "4+",
+          "concept_mixing": "high",
+          "qualifier_sensitivity": "extreme",
+          "data_density": "high"
+        }
+      }
+    },
+    "sub_profile_b_tfc": {
+      "current_state": "ALL 6 T/F/C questions are Easy because the correct classification is unambiguous. None operate at the boundary between logical necessity and logical possibility. Each question resolves under a single dominant model. In these questions, alternative logically valid models either do not exist or collapse into the same outcome space, eliminating ambiguity. No multi-step inference or competing interpretations are required.",
+      "what_makes_harder": "Hard T/F/C questions feature statements sitting exactly at the certainty boundary — consistent with the passage (plausible) but not logically provable (yielding Cannot Be Deduced). Difficulty is injected by requiring evaluation of whether a conclusion is entailed under ALL valid models, not just checking for explicit surface contradiction.",
+      "HARD_blueprint": {
+        "description": "Hard T/F/C questions sit exactly at the certainty boundary. The statement is logically consistent with the passage but not provable — yielding Cannot Be Deduced. Difficulty requires evaluating whether conclusion holds across ALL valid models, not just checking surface contradiction.",
+        "examples": [
+          "[EXTRAPOLATED — all 6 T/F/C questions in dataset are Easy]"
+        ]
+      }
+    }
+  },
+  "trap_and_error_architecture": {
+    "sub_profile_a_traps": {
+      "MODEL_FIXATION_TRAP": {
+        "description": "This is the underlying cognitive failure that generates necessity errors: the student treats a single constructed model as exhaustive, failing to test whether alternative valid models invalidate the conclusion.",
+        "note": "Root cause of Necessity Trap — must be encoded in all Hard question generation"
+      },
+      "SCOPE_TRAP": {
+        "description": "Conclusion is true for a subset of cases but not universally. Students fail to test edge cases.",
+        "examples": [
+          "M2Q16 Options D/E",
+          "M1Q48 Option D"
+        ]
+      },
+      "NECESSITY_TRAP": {
+        "description": "Conclusion is possible but not logically required. Primary failure mode in CT. Driven by Model Fixation.",
+        "examples": [
+          "M1Q21 Option A",
+          "M4Q36 Option D"
+        ]
+      },
+      "DIRECTION_TRAP": {
+        "description": "Reverses logical relationship — affirming the consequent or confusing sufficient for necessary.",
+        "examples": [
+          "M3Q6 Option D",
+          "M1Q46 Option A"
+        ]
+      },
+      "OVERGENERALIZATION_TRAP": {
+        "description": "Extends a limited claim beyond stated boundaries, substituting 'all' for 'some'.",
+        "examples": [
+          "M2Q32 Option B",
+          "M2Q40 Option C"
+        ]
+      },
+      "MISSING_CONSTRAINT_TRAP": {
+        "description": "Student processes 3 of 4 data points and selects an option violating the forgotten 4th constraint.",
+        "examples": [
+          "M2Q48 Option C",
+          "M3Q35 Option C"
+        ]
+      },
+      "CONSTRAINT_INTERACTION_FAILURE": {
+        "description": "Student evaluates constraints independently rather than jointly, failing to detect contradictions or dependencies that only emerge when multiple constraints are applied simultaneously.",
+        "examples": [
+          "M2Q48 (membership + class size + gender constraints)",
+          "M3Q35 (shelf position constraints interact)"
+        ],
+        "note": "This is what makes high-density logic questions genuinely hard — not individual constraint complexity but joint constraint interaction"
+      }
+    },
+    "sub_profile_b_traps": {
+      "PLAUSIBILITY_TRAP": {
+        "description": "Statement is historically, scientifically, or intuitively reasonable but lacks logically sufficient proof in passage. Students project outside knowledge to validate a model the text leaves undetermined.",
+        "examples": [
+          "M3Q48 — assigning 1920s dance craze to specific cultural origin"
+        ]
+      },
+      "SCOPE_EXTENSION_TRAP": {
+        "description": "Passage limits premises to a specific subset but statement asserts universal conclusion.",
+        "examples": [
+          "M1Q37 — passage establishes carved symbols on specific walls, option assumes universal negative"
+        ]
+      },
+      "NEGATION_CONFUSION_TRAP": {
+        "description": "Students confuse a statement that structurally contradicts the text's premises (False) with a statement that simply lacks premise support (Cannot Be Deduced).",
+        "examples": [
+          "M3Q26",
+          "M4Q44"
+        ]
+      }
+    },
+    "error_frequency_map": {
+      "most_common": "Model Fixation leading to Necessity Trap — treating one valid configuration as the only valid configuration",
+      "second_most_common": "Missing Constraint Trap — processing most but not all data points",
+      "third_most_common": "Negation Confusion — Cannot Be Deduced mistaken for False in T/F/C format"
+    }
+  },
+  "time_pressure_anatomy": {
+    "valid_model_proliferation": "Time pressure increases sharply when multiple valid models must be maintained simultaneously rather than a single deterministic chain. Forces exhaustive testing rather than simple derivation.",
+    "data_density": "Time scales non-linearly with variable count. M2Q48 introduces males, females, hair colour, class size limits, and exceptions. M1Q6 uses four interlocking absolute constraints all of which must be mapped before evaluating options.",
+    "proposition_count": "DATA block + PROPOSITIONS block format (M1Q21, M2Q48, M3Q35, M4Q6) effectively turns one question into four mini-questions evaluated sequentially.",
+    "qualifier_sensitivity": "Options with 'at least one time' or 'always' require exhaustive boundary testing — students must actively search for counterexamples rather than confirming a single valid configuration.",
+    "back_tracking_cost": "High in algorithmic/ordering questions. Error in step 1 of M4Q13 or M1Q2 forces total restart of logical chain.",
+    "low_cost_examples": [
+      "M1Q50",
+      "M4Q3",
+      "M3Q20"
+    ],
+    "high_cost_examples": [
+      "M2Q48",
+      "M1Q6",
+      "M3Q35",
+      "M4Q20"
+    ]
+  },
+  "calibrated_uplift": {
+    "layer1_scenario_structure": {
+      "adding_constraints": "Inject a seemingly minor exception that shatters simple binary categories. e.g. adding 'with the exception of Sarah' to a universal rule (M2Q48).",
+      "hard_vs_easy_observation": "Easy questions feature linear uni-directional relationships (A > B > C). Hard questions feature intersecting conditional rules where resolving A requires first resolving an unstated dependency in B.",
+      "specific_examples": [
+        "M1Q50 vs M1Q6",
+        "M4Q3 vs M4Q20"
+      ]
+    },
+    "layer2_cognitive_load": {
+      "working_memory_burden": "Separate related data with irrelevant or bridging information (M3Q35 scatters shelf contents across four bullet points instead of sequential list).",
+      "forcing_elimination": "Ask 'which statement is necessarily false?' instead of 'what is the arrangement?' (M1Q6, M2Q48, M4Q33). Prevents single-model building — forces testing all options against all valid models.",
+      "qualifier_injection": "Replace 'always' with 'necessarily' or 'in some cases' to activate qualifier sensitivity without changing scenario."
+    },
+    "layer3_answer_engineering": {
+      "five_option_model": {
+        "correct": "Matches pure logical derivation across all constraints",
+        "direction_trap": "Student assumes Q→P from P→Q (affirming the consequent) or denies the antecedent",
+        "necessity_trap": "Student treats logical possibility as logical necessity — validates for one model, fails to test alternatives",
+        "scope_trap": "Student ignores a counterexample or drops an explicit exception",
+        "overgeneralization": "Student assumes 'all' from 'some'",
+        "constraint_interaction_failure": "Student evaluates constraints independently, missing joint interaction"
+      },
+      "tfc_boundary_engineering": {
+        "false_options": "Engineered by presenting conclusion that structurally violates passage premises under all valid models",
+        "cannot_be_deduced_options": "Engineered to be logically consistent with passage but not entailed by it. Must represent a valid possible model — trapping student into treating it as necessary."
+      },
+      "elimination_mapping_rule": "Every distractor must correspond to a specific traceable reasoning error. Generator must be able to state exactly which logical failure leads to selecting each wrong option."
+    }
+  },
+  "passage_scenario_interaction_patterns": {
+    "five_option_formats": {
+      "bulleted_lists": "Used in complex deductions (M1Q6, M2Q48, M3Q35). Creates highest cognitive load — strips conversational prose and forces student to manually assemble connective logical tissue from raw disconnected propositions.",
+      "prose_descriptions": "Used in relational ordering and truth/lie puzzles (M1Q2, M1Q10, M2Q16). Traps embedded in pronoun usage and sequential wording.",
+      "symbolic_notation": "Used in M1Q46, M4Q50. Strips real-world intuition entirely, forcing strict reliance on formal logic rules (De Morgan's laws, necessary vs sufficient)."
+    },
+    "tfc_format": {
+      "passage_vs_statement_scope": "Certainty gap defined by the full set of logically permissible models defined by the constraint system. Tests whether statement's conclusion is entailed under ALL valid models permitted by passage premises, independent of real-world plausibility."
+    }
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": {
+      "absolute": [
+        "necessarily",
+        "certainly",
+        "always",
+        "never",
+        "all",
+        "only",
+        "completely"
+      ],
+      "relative_partial": [
+        "possibly",
+        "at least one",
+        "some",
+        "more than half"
+      ]
+    },
+    "primary_trap_necessarily_vs_possibly": {
+      "description": "Most dominant ambiguity mechanism in Bocconi CT. Present in M1Q6, M1Q21, M2Q16, M2Q23, M2Q40, M3Q35, M4Q6, M4Q33, M4Q36.",
+      "failure_mode": "Students recognise an outcome is possible (exists in one valid model) but fail to verify it is necessarily true (exists in ALL valid models)"
+    },
+    "ct_vs_rc_tfc_distinction": {
+      "RC_TFC": "Evaluates text-bound certainty and authorial intent — is it supported by specific textual phrases?",
+      "CT_TFC": "Evaluates strict logical validity — does the statement hold across ALL logically valid interpretations of the passage?",
+      "false_vs_cannot": "In CT: False requires the statement to logically destroy a stated premise under all valid models (M3Q26, M4Q44). Cannot Be Deduced means the statement represents a possible unstated model (M3Q48). Students fail by treating unmentioned logical corollaries as False."
+    }
+  },
+  "generation_fingerprint": "## CT GENERATION FINGERPRINT\n\nBocconi Critical Thinking evaluates logical validity under time pressure through two sub-profiles: 5-option constraint puzzles and True/False/Cannot Be Deduced (T/F/C) logic tests. Difficulty arises not from scenario complexity or domain knowledge but from the strictness of deduction, qualifier sensitivity, and premise-to-conclusion structure. This is governed by the evil answer choices principle — every wrong option is engineered to trap a specific traceable reasoning path failure in formal logic.\n\nFor Sub-Profile A (5-option), scenarios map relational ordering, syllogistic chains, and intersecting constraints using high data density. Traps rely on the qualifier inventory: necessarily, possibly, always, never, all, some, only. The dominant failure mode is the Necessity Trap, driven by Model Fixation — the student validates an outcome for one configuration but fails to test alternative models. A separate and equally important failure is Constraint Interaction Failure: the student evaluates constraints independently rather than jointly, missing dependencies that only emerge when multiple constraints are applied simultaneously. Generation must follow the Elimination Mapping Rule: each distractor maps to a specific incorrect intermediate inference — affirming the consequent, ignoring a counterexample, treating possibility as necessity, or failing to apply joint constraint interaction.\n\nFor Sub-Profile B (T/F/C), the mechanism tests logical validity, sharply distinct from RC T/F/C text-bound certainty. TRUE means entailed under all valid models. FALSE means structurally violating the text's premises under all valid models. CANNOT BE DEDUCED means logically underdetermined — a valid possible model that is not logically provable. Generation of Cannot Be Deduced options must leverage the certainty boundary: constructing statements highly consistent with the passage's logic but missing a necessary premise, forcing students to project external reasoning.\n\nAcross both formats, time pressure and cognitive load increase sharply when multiple valid models must be maintained simultaneously. The highest difficulty questions are those in which multiple valid models exist, and the correct answer is the only statement that remains invariant across all of them."
+}

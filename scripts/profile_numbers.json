@@ -1,0 +1,156 @@
+{
+  "topic": "Numbers",
+  "approved": false,
+  "question_count": 4,
+  "coverage_map": {
+    "subtopics": [
+      {
+        "name": "Properties of Numbers / Exponents",
+        "count": 2,
+        "confidence": "MED",
+        "refs": [
+          "M1Q14",
+          "M1Q43"
+        ]
+      },
+      {
+        "name": "Sequences and Series",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M1Q5"
+        ]
+      },
+      {
+        "name": "Factors and Multiples",
+        "count": 1,
+        "confidence": "LOW",
+        "note": "[LOW CONFIDENCE — 1 example only]",
+        "refs": [
+          "M4Q17"
+        ]
+      }
+    ],
+    "coverage_assessment": "The numbers domain ignores pure number theory concepts like modular arithmetic, prime factor counting formulas, and complex divisibility rules. Instead, it acts as a test of exhaustive enumeration and recursive logic, requiring students to validate integer possibilities against compound constraints."
+  },
+  "difficulty_ladder": {
+    "easy": {
+      "refs": [
+        "M1Q5"
+      ],
+      "steps_required": "2 to 3 steps",
+      "concept_mixing": "None.",
+      "qualifier_sensitivity": "Low.",
+      "answer_similarity": "Moderate."
+    },
+    "medium": {
+      "refs": [
+        "M1Q14",
+        "M1Q43",
+        "M4Q17"
+      ],
+      "steps_required": "3 to 5 steps (find all valid factors, test against a second constraint)",
+      "concept_mixing": "Integer properties combined with exponents or real-world constraints",
+      "qualifier_sensitivity": "High ('positive integers', 'right-hand page')",
+      "answer_similarity": "Very high; wrong answers represent valid numbers that fail a secondary constraint"
+    },
+    "hard": {
+      "refs": [],
+      "note": "[EXTRAPOLATED — 0 examples]",
+      "steps_required": "5+ steps",
+      "concept_mixing": "Sequences combined with complex exponent rules",
+      "qualifier_sensitivity": "Nested constraints",
+      "answer_similarity": "Distractors satisfy 2 out of 3 constraints"
+    }
+  },
+  "trap_and_error_architecture": {
+    "distractor_engine": {
+      "input_structure": "Integer N, Primary rule (factors/consecutive), Secondary real-world constraint",
+      "correct_transformation": "Generate ALL factor partitions of N → Filter by Secondary Constraint → Extract targeted variable (max/min/left/right)",
+      "finite_distractor_set": [
+        "Valid Primary / Failed Secondary — Premature termination on first valid partition, maps to M4Q17: 9",
+        "Wrong Variable Extraction — Returning the left page instead of the right page, maps to M1Q43: 78",
+        "Boundary Case Omission — Ignoring the (1,1,N) partition or the X^1 exponent case, maps to M1Q14: 16 exclusion failure"
+      ]
+    },
+    "traps": [
+      {
+        "name": "Premature Termination",
+        "mechanism": "Student finds the first integer triplet satisfying the primary constraint and stops searching, missing the unique solution that satisfies the secondary constraint.",
+        "refs": [
+          "M4Q17",
+          "M1Q14"
+        ],
+        "name_normalized": "PREMATURE_TERMINATION"
+      },
+      {
+        "name": "Wrong Variable Extraction",
+        "mechanism": "Student correctly finds the pair of consecutive integers but returns the left-hand (smaller) page instead of the right-hand (larger) page.",
+        "refs": [
+          "M1Q43"
+        ],
+        "name_normalized": "WRONG_VARIABLE_EXTRACTION"
+      },
+      {
+        "name": "Boundary Case Omission",
+        "mechanism": "Student enumerates common factorizations but fails to include trivial cases (e.g., N^1, 1^N), missing a valid solution or incorrectly excluding a candidate.",
+        "refs": [
+          "M1Q14"
+        ],
+        "name_normalized": "BOUNDARY_CASE_OMISSION"
+      }
+    ],
+    "elimination_mapping": {
+      "M1Q5": {
+        "A": "Computed a3=9 correctly but used wrong formula for a4: 3×9-0=27 or arithmetic error → 9 and 18",
+        "B": "Computed a3=9 correctly but used a4=3×9-0=27... or arithmetic error → 9 and 24",
+        "C": "Off-by-one error in a3: 3×3-2=7? or wrong base values → 8 and 15",
+        "E": "Student miscomputed a2 resulting in incorrect a3 value → 8 and 15 or 9 and 15"
+      },
+      "M1Q14": {
+        "B": "Appears in valid pair 4^5 — student confirmed it can appear",
+        "C": "Student found some valid pairs and assumed all options are covered",
+        "D": "Appears in valid pair 32^2 — student confirmed it can appear",
+        "E": "Appears in valid pair 4^5 (5 is the exponent) — student confirmed it can appear"
+      },
+      "M1Q43": {
+        "A": "Incorrect square root estimation → tried 73×74=5402, not 6162",
+        "C": "Wrong Variable Extraction — returned left page: 78×79=6162, selected 76 (arithmetic error)",
+        "D": "Underestimate of √6162",
+        "E": "Underestimate → tried 66×67=4422, not 6162"
+      },
+      "M4Q17": {
+        "A": "Premature termination on (1,2,9) triplet → next year (2,3,10)=60≠76, but student selected 7 as max",
+        "B": "Premature termination on (1,3,6) triplet → next year (2,4,7)=56≠76, selected 6 as max",
+        "C": "Premature termination on some triplet → selected 8 as max",
+        "E": "Premature termination on (1,2,9) → selected 9 as max without verifying next-year constraint"
+      }
+    }
+  },
+  "time_pressure_anatomy": {
+    "description": "Exhaustive search is highly time-consuming. Systematically listing all integer triplets that multiply to 18 (M4Q17) forces a methodical pace that is difficult to maintain under time pressure. M1Q43 requires estimating the square root of a 4-digit number (6162) without a calculator, inducing panic and guessing."
+  },
+  "calibrated_uplift": {
+    "key_principle": "Bocconi difficulty = familiar problem + evil answer choices + slight ambiguity + time pressure.",
+    "layer_1_problem_structure_mutation": "Requiring basic factorizations to satisfy a secondary, delayed condition ('next year').",
+    "layer_2_cognitive_load_injection": "Forcing manual square root estimation of large integers.",
+    "layer_3_answer_engineering": "MOST WEIGHT. Structure options around valid intermediate numbers that represent the wrong variable or fail constraint 2. Every distractor must be a number that a student could plausibly reach via a specific enumeration error."
+  },
+  "figure_passage_interaction_patterns": {
+    "figure_count": 0,
+    "note": "No figures. The text embeds risk through real-world anchoring. 'Open book' implies consecutive integers. 'Right-hand page' mathematically dictates the larger integer. 'Next year' mathematically dictates n1+1, n2+1, n3+1."
+  },
+  "ambiguity_patterns": {
+    "qualifier_inventory": [
+      "cannot be either X or Y",
+      "right-hand page",
+      "next year",
+      "positive integers",
+      "whole positive numbers"
+    ],
+    "primary_ambiguity_mechanism": "'CANNOT be either X or Y' is linguistically dense, forcing a dual-check mental verification. Real-world constraints act as implicit mathematical rules that must be inferred, increasing cognitive load before any arithmetic begins.",
+    "near_correct_construction": "Second-closest options are valid solutions to the primary constraint that fail the secondary constraint, or correctly solved problems where the wrong variable is returned."
+  },
+  "generation_fingerprint": "## NUMBERS GENERATION FINGERPRINT\n\nThe Numbers topic tests systematic enumeration and constraint satisfaction over abstract formulas. Dominant question types involve finding integer factors or consecutive numbers that satisfy two distinct, simultaneous rules. The distractor engine operates via a Dual-Constraint framework: the test generates distractors using valid numbers that perfectly satisfy the primary constraint but fail the secondary constraint, or represent the inverse variable in a paired solution (left vs right).\n\nPrimary trap mechanics involve Premature Termination (stopping the search after identifying the first valid mathematical case) and boundary case omission (ignoring trivial cases like N^1). Difficulty calibration mandates that the core algebra remains simple, but the search space is rigid and exhaustive.\n\nThe primary difficulty driver is not Numbers complexity but the precision required to distinguish answer choices engineered from specific reasoning errors.\n\nAdhere to the Elimination Mapping Rule: every wrong option must correspond to a specific traceable student error — the generator must be able to state exactly which mistake leads to selecting each distractor."
+}
